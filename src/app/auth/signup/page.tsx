@@ -1,5 +1,6 @@
 import AuthForm from "@/features/auths/components/auth-form";
 import AuthHeader from "@/features/auths/components/auth-header";
+import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "สมัครสมาชิก",
