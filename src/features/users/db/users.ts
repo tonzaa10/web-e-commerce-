@@ -1,17 +1,16 @@
-import { db } from '@/lib/db';
-import { unstable_cacheLife as cacheLife, 
-    unstable_cacheTag as cacheTag 
-} from 'next/cache';
-import { getUserGlobalTag } from './cache';
+import { db } from '@/lib/db'
+import {
+    unstable_cacheLife as cacheLife,
+    unstable_cacheTag as cacheTag
+} from 'next/cache'
+import { getUserIdTag } from './cache'
 
 export const getUserById = async (id: string) => {
     'use cache'
 
-    cacheLife('hours'); // Cache for 5 minutes
-    cacheTag(await getUserGlobalTag(id)); // Cache tag for user
-
+    cacheLife('hours')
+    cacheTag(getUserIdTag(id))
     try {
-
         const user = await db.user.findUnique({
             where: { id, status: 'Active' },
             select: {
@@ -22,13 +21,12 @@ export const getUserById = async (id: string) => {
                 status: true,
                 address: true,
                 picture: true,
-                tel: true,
-            },
+                tel: true
+            }
         })
-        console.log('user', user);
-        return user;
+        return user
     } catch (error) {
-        console.error('Enter getting user by id', error);
-        return null;
+        console.error('Error getting user by id:', error)
+        return null
     }
 }

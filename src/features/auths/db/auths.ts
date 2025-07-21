@@ -14,7 +14,7 @@ interface SignupInput {
   confirmPassword: string;
 }
 
-interface SinginInput {
+interface SigninInput {
   email: string;
   password: string;
 }
@@ -86,7 +86,7 @@ export const signup = async (input: SignupInput) => {
   }
 };
 
-export const signin = async (input: SinginInput) => {
+export const signin = async (input: SigninInput) => {
   try {
     const { success, data, error } = signinSchema.safeParse(input);
     if (!success) {
@@ -125,7 +125,7 @@ export const signin = async (input: SinginInput) => {
     const token = await generateJwtToken(user.id);
     await setCookieToken(token);
   } catch (error) {
-    console.error("Error sign inn user: ", error);
+    console.error("Error sign in user:", error);
     return {
       message: "เกิดข้อผิดพลาดในการเข้าสู่ระบบ",
     };
