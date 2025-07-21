@@ -40,6 +40,6 @@ export const middleware = async (req: NextRequest) => {
 export const config = {
     matcher: [
         '/',
-        '/auth/:path.' // Match all paths under /auth
+        '/auth/:path*' // Match all paths under /auth
     ]
 }
