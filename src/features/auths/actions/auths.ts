@@ -1,11 +1,11 @@
 "use server";
 
 import { InitialFormState } from "@/types/action";
-import {signin, signup} from '@/features/auths/db/auths'
+import { signin, signout, signup } from '@/features/auths/db/auths'
+import { success } from "zod";
 
 
-export const authAction = async (_prevState: InitialFormState, formData: FormData) => 
-  {
+export const authAction = async (_prevState: InitialFormState, formData: FormData) => {
   const rawData = {
     name: formData.get("name") as string,
     email: formData.get("email") as string,
@@ -16,10 +16,17 @@ export const authAction = async (_prevState: InitialFormState, formData: FormDat
   const result = rawData.confirmPassword ? await signup(rawData) : await signin(rawData);
 
   return result && result.message ? { success: false, message: result.message, errors: result.error } :
-   {
+    {
       success: true,
       message: rawData.confirmPassword
         ? "สมัครสมาชิกสำเร็จ"
         : "เข้าสู่ระบบสำเร็จ",
     };
 };
+
+export const signoutAction = async () => {
+  const result = await signout()
+
+  return result && result.message ? { success: false, message: result.message } :
+    { success: true, message: "ออกจากระบบสำเร็จ" };
+}

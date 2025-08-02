@@ -11,7 +11,7 @@ const Navbar = ({ user }: NavbarProps) => {
     <nav className="flex items-center gap-3">
       {/* Mobile Navigation */}
       {user && <CartIcon/>}
-      <MobileMenu/>
+      <MobileMenu user={user} />
 
       {/* Desktop Navigation */}
       <div className="hidden">
