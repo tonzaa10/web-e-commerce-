@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner"
 
 export const useSignOut = () => {
-    const [isPanding, startTransition] = useTransition();
+    const [isPending, startTransition] = useTransition();
     const router = useRouter();
 
     const handleSignout = () => {
@@ -18,5 +18,5 @@ export const useSignOut = () => {
           }
         })
     }
-    return {isPanding, handleSignout}
+    return {isPending, handleSignout}
 }

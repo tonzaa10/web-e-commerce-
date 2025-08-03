@@ -27,7 +27,7 @@ const AuthForm = ({ type }: AuthFormPorps) => {
     </div>
   );
 
-  const { errors, formAction, isPanding, clearErrors } = useForm(
+  const { errors, formAction, isPending, clearErrors } = useForm(
     authAction,
     "/"
   );
@@ -46,7 +46,7 @@ const AuthForm = ({ type }: AuthFormPorps) => {
         <SubmitBtn
           name={type === "signin" ? "สมัครสมาชิก" : "เข้าสู่ระบบ"}
           className="w-full"
-          padding={isPanding}
+          padding={isPending}
         />
       </CardFooter>
     </Form>

@@ -29,14 +29,14 @@ export const AuthButtons = () => (
 );
 
 export const SignoutButton = ({ isMobile = false }) => {
-  const { isPanding, handleSignout } = useSignOut();
+  const { isPending, handleSignout } = useSignOut();
   if (isMobile) {
     return (
       <SheetClose asChild>
         <Button
           variant="destructive"
           size="lg"
-          disabled={isPanding}
+          disabled={isPending}
           onClick={handleSignout}
         >
           ออกจากระบบ
@@ -47,7 +47,7 @@ export const SignoutButton = ({ isMobile = false }) => {
   return (
     <Button
       variant="destructive"
-      disabled={isPanding}
+      disabled={isPending}
       onClick={handleSignout}
        className="w-full mt-4 cursor-pointer"
     >

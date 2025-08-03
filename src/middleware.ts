@@ -14,6 +14,7 @@ const decryptJwtToken = async (token: string): Promise<Payload | null> => {
         return payload as Payload
 
     } catch (error) {
+        console.error('Error deccripting jew token', error)
         return null
     }
 }

@@ -8,7 +8,7 @@ import {toast} from 'sonner'
 export const useForm = (action: ActionType, route?: string) => {
 
     const [errors, setErrors] = useState<Record<string, string[]>>({})
-    const [state, formAction, isPanding] = useActionState(action, initialFormState)
+    const [state, formAction, isPending] = useActionState(action, initialFormState)
     const router = useRouter()
 
     useEffect(() => {
@@ -19,16 +19,16 @@ export const useForm = (action: ActionType, route?: string) => {
         if(state.message){
             if(state.success){
                 toast.success(state.message)
-                route && router.push(route)
+                if (route) router.push(route)
             }else{
                 toast.error(state.message)
             }
         }
-    }, [state, route, router, toast])
+    }, [state, route, router])
 
     const clearErrors = () => setErrors({})
 
     return{
-        errors, formAction, isPanding, clearErrors
+        errors, formAction, isPending, clearErrors
     }
 }
