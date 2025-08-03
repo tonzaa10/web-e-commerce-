@@ -64,12 +64,12 @@ const MobileMenu = ({ user }: MobileMenuProps) => {
         </div>
         {user && (
           <SheetFooter>
-            <SignoutButton />
+            <SignoutButton isMobile/>
           </SheetFooter>
         )}
       </SheetContent>
     </Sheet>
   );
-};
+}; 
 
 export default MobileMenu;
