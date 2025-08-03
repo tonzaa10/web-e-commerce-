@@ -1,6 +1,7 @@
 import { UserType } from "@/types/user";
 import MobileMenu from "./mobile-menu";
 import CartIcon from "./cart-icon";
+import { DesktopNavLinks } from "./ืnavlinks";
 
 interface NavbarProps {
   user: UserType | null;
@@ -14,8 +15,8 @@ const Navbar = ({ user }: NavbarProps) => {
       <MobileMenu user={user} />
 
       {/* Desktop Navigation */}
-      <div className="hidden">
-        <div>Desktop Links</div>
+      <div className="hidden md:flex md:items-center">
+        <DesktopNavLinks/>
         {user ? <div>Desktop Menu</div> : <div>Go To Signin Button</div>}
       </div>
 
