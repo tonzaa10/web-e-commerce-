@@ -1,4 +1,4 @@
 import {Category} from "@prisma/client"
 
 
-export type Category = Omit<Category, 'createdAT', 'updatedAt'>
+export type CategoryType = Omit<Category, 'createdAT', 'updatedAt'>

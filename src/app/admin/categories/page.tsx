@@ -1,13 +1,15 @@
 import { Badge } from "@/components/ui/badge";
+import CategoryForm from "@/features/categories/components/category-form";
+import CategroyList from "@/features/categories/components/category-list";
 import { getCategoies } from "@/features/categories/db/categories";
 
 
 const CategoriesAdminPage = async () => {
-   
+
     const categories = await getCategoies()
 
-const activeCategoryCount =  categories.filter((c)=> c.status === 'Active').length
-const inactiveCategoryCount =  categories.filter((c)=> c.status === 'Active').length
+    const activeCategoryCount = categories.filter((c) => c.status === 'Active').length
+    const inactiveCategoryCount = categories.filter((c) => c.status === 'Active').length
 
     return (
         <div className="p-4 sm:p-6 space-y-6">
@@ -19,11 +21,11 @@ const inactiveCategoryCount =  categories.filter((c)=> c.status === 'Active').le
                 </div>
                 <div className="flex flex-wrap gap-2 sm:gap-3">
                     <Badge variant='outline' className="px-2 sm:px-3 py-1 text-xs sm:text-sm">
-                         <span className="font-semibold text-green-600">{activeCategoryCount}</span>
+                        <span className="font-semibold text-green-600">{activeCategoryCount}</span>
                         Active
                     </Badge>
                     <Badge variant='outline' className="px-2 sm:px-3 py-1 text-xs sm:text-sm">
-                         <span className="font-semibold text-red-500">{inactiveCategoryCount}</span>
+                        <span className="font-semibold text-red-500">{inactiveCategoryCount}</span>
                         Incative
                     </Badge>
                     <Badge variant='outline' className="px-2 sm:px-3 py-1 text-xs sm:text-sm">
@@ -34,7 +36,19 @@ const inactiveCategoryCount =  categories.filter((c)=> c.status === 'Active').le
             </div>
 
             {/* Form */}
-            <div>Form</div>
+            <div className='grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8'>
+                <div className='lg:col-span-1'>
+                    <CategoryForm />
+                </div>
+
+                {/* <div>Test</div> */}
+            </div>
+            
+            {/* Category List */}
+            <div>
+                <CategroyList categories={categories} />
+            </div>
+
         </div>
     );
 };
