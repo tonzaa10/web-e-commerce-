@@ -7,6 +7,7 @@ import { Save } from "lucide-react"
 import Form from "next/form"
 import { categoryAction } from "@/features/categories/acitons/categories"
 import ErrorMessage from "@/components/shared/error-message"
+import { useEffect } from "react"
 
 interface EditCategoryModalProps {
     open: boolean;
@@ -17,9 +18,15 @@ interface EditCategoryModalProps {
 
 const EditCategoryModal = ({ open, onOpenChange, category }: EditCategoryModalProps) => {
 
-    const { errors, formAction, isPending, clearErrors } = useForm(categoryAction);
+    const { state, errors, formAction, isPending, clearErrors } = useForm(categoryAction);
 
+    useEffect(() => {
+        if (state.success) onOpenChange(false)
+    }, [state, onOpenChange])
 
+    useEffect(()=> {
+       if(open) clearErrors()
+    },[open, clearErrors])
 
     return (
 
