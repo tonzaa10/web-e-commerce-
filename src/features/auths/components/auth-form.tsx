@@ -20,7 +20,7 @@ const AuthForm = ({ type }: AuthFormPorps) => {
     required = false
   ) => (
     <div className="flex flex-col gap-2">
-      <InputForm labal={label} id={id} type={type} required={required} />
+      <InputForm label={label} id={id} type={type} required={required} />
       {errors[id] && (
         <ErrorMessage error={errors[id][0]}/>
       )}
@@ -46,7 +46,7 @@ const AuthForm = ({ type }: AuthFormPorps) => {
         <SubmitBtn
           name={type === "signin" ? "สมัครสมาชิก" : "เข้าสู่ระบบ"}
           className="w-full"
-          panding={isPending}
+          pending={isPending}
         />
       </CardFooter>
     </Form>

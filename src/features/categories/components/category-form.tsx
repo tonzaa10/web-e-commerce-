@@ -29,7 +29,7 @@ const CategoryForm = () => {
                 <CardContent>
                     <div className='space-y-2'>
                         <InputForm
-                            labal='Category name'
+                            label='Category name'
                             id='category-name'
                             placeholder='Enter category name'
                             required
@@ -39,7 +39,7 @@ const CategoryForm = () => {
                     </div>
                 </CardContent>
                 <CardFooter>
-                    <SubmitBtn name='Add Category'  icon={Plus} className='w-full' panding={isPending}  />
+                    <SubmitBtn name='Add Category'  icon={Plus} className='w-full' pending={isPending}  />
                 </CardFooter>
             </Form>
         </Card>

@@ -63,7 +63,7 @@ const CategoriesAdminPage = async () => {
                 </div>
 
                 {/* Category List */}
-                <div className='lg:col-span-2'>
+                <div className="lg:col-span-2">
                     <CategoryList categories={categories} />
                 </div>
             </div>

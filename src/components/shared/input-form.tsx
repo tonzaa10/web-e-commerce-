@@ -2,13 +2,13 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 
 interface InputFormProps extends React.InputHTMLAttributes<HTMLInputElement> {
-  labal: string;
+  label: string;
   id: string;
   required?: boolean;
 }
 
 const InputForm = ({
-  labal,
+  label,
   id,
   required = false,
   ...props
@@ -17,7 +17,7 @@ const InputForm = ({
     <>
       <div className="flex flex-col gap-2">
         <Label htmlFor={id}>
-          {labal}
+          {label}
           {required && <span className="text-red-500">*</span>}
         </Label>
         <Input id={id} name={id}  {...props} />

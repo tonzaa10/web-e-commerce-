@@ -18,7 +18,7 @@ interface CategoryListProps {
 }
 
 
-const CategroyList = ({ categories }: CategoryListProps) => {
+const CategoryList  = ({ categories }: CategoryListProps) => {
 
 const [isEditModal, setEditModal] =  useState(false)
 const [selectedCategory, setSelectedCategory] = useState<CategoryType | null>(null)
@@ -117,4 +117,4 @@ const handleEditClick = (category:CategoryType) => {
     )
 }
 
-export default CategroyList
+export default CategoryList 
