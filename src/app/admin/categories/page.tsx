@@ -9,7 +9,7 @@ const CategoriesAdminPage = async () => {
     const categories = await getCategoies()
 
     const activeCategoryCount = categories.filter((c) => c.status === 'Active').length
-    const inactiveCategoryCount = categories.filter((c) => c.status === 'Active').length
+    const inactiveCategoryCount = categories.filter((c) => c.status === 'Inactive').length
 
     return (
         <div className="p-4 sm:p-6 space-y-6">
