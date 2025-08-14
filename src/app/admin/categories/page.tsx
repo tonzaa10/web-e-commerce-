@@ -1,6 +1,6 @@
 import { Badge } from "@/components/ui/badge";
 import CategoryForm from "@/features/categories/components/category-form";
-import CategroyList from "@/features/categories/components/category-list";
+import CategoryList from "@/features/categories/components/category-list";
 import { getCategoies } from "@/features/categories/db/categories";
 
 
@@ -43,10 +43,10 @@ const CategoriesAdminPage = async () => {
 
                 {/* <div>Test</div> */}
             </div>
-            
+
             {/* Category List */}
             <div>
-                <CategroyList categories={categories} />
+                <CategoryList categories={categories} />
             </div>
 
         </div>
