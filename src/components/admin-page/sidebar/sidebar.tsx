@@ -6,7 +6,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
 import { useSidebar } from "@/providers/SidebarProvider";
 import { UserType } from "@/types/user";
-import { FolderTree, LayoutDashboard, LogOut, X } from "lucide-react";
+import { FolderTree, LayoutDashboard, LogOut, ShoppingCart, X } from "lucide-react";
 import Link from "next/link";
 import SidebarLink from "./sidebar-link";
 import { usePathname } from "next/navigation";
@@ -31,6 +31,11 @@ const SidebarAdmin = ({ user }: SidebarAdminProps) => {
       label: "Categories",
       href: "/admin/categories",
       icon: <FolderTree size={20} />,
+    },
+    {
+      label: "Products",
+      href: "/admin/products",
+      icon: <ShoppingCart size={20} />,
     },
   ];
 
