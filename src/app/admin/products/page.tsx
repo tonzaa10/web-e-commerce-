@@ -7,7 +7,7 @@ const ProductAdminPage = async () => {
   const products =   await getProducts()
 
     return (
-        <div className="p-4 sm:p-6">
+        <div className="p-4 sm:p-6 space-y-6">
             {/* Product Header */}
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 pb-6 border-b">
                 <div className="flex flex-col gap-1">

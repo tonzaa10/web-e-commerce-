@@ -90,7 +90,7 @@ const ProductList = ({ products }: ProductListProps) => {
                                     Low Stock
                                 </Badge>
                             </div>
-                            <div className="relative md:w-64  w-full ">
+                            <div className="relative w-full sm:w-64 ">
                                 <Search
                                     size={16}
                                     className="absolute left-2 top-2.5 text-muted-foreground"
