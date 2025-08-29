@@ -1,6 +1,4 @@
-
-
-type CACHE_TAG = 'users' | 'categories';
+type CACHE_TAG = 'users' | 'categories'| 'products';
 
 export const getGlobalTag = (tag: CACHE_TAG) => {
   return `global:${tag}` as const;
@@ -9,4 +7,6 @@ export const getGlobalTag = (tag: CACHE_TAG) => {
 export const getIdTag = (tag: CACHE_TAG, id: string) => {
   return `id:${id}-${tag}` as const;
 };
+
+
 
