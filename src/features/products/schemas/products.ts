@@ -1,38 +1,35 @@
-import z from "zod";
-import { de } from "zod/v4/locales";
+import { z } from "zod";
 
 // Define Constants
 const MIN_TITLE_LENGTH = 3;
 const MIN_DESC_LENGTH = 10;
 
 // Define Error Message
-
-const ERROR_MESSAGES = {
-    title: `Product tite must be at least ${MIN_TITLE_LENGTH} characters.`,
-    description: `Product description must be at least ${MIN_DESC_LENGTH} characters.`,
-    categoryId: "Category is required.",
-    basePrice: "Base price must be a positive number.",
-    price: "Sale price must be a positive number.",
-    stock: "Stock price must be a positive number.",
-}
-
-
+const ERROR_MESSAGE = {
+    title: `Product title must be at least ${MIN_TITLE_LENGTH} characters`,
+    description: `Description must be at least ${MIN_DESC_LENGTH} characters`,
+    categoryId: "Category is required",
+    basePrice: "Base price must be a positive number",
+    price: "Sale price must be a positive number",
+    stock: "Stock price must be a positive number",
+};
 // Careate Product Schema
 
 export const createProductSchema = z.object({
-    title: z.string().min(MIN_TITLE_LENGTH, { message: ERROR_MESSAGES.title }),
+    title: z.string().min(MIN_TITLE_LENGTH, { message: ERROR_MESSAGE.title }),
 
-    description: z.string().min(MIN_DESC_LENGTH, { message: ERROR_MESSAGES.description }),
+    description: z
+        .string()
+        .min(MIN_DESC_LENGTH, { message: ERROR_MESSAGE.description }),
 
-    categoryId: z.string().min(1,{ message: ERROR_MESSAGES.categoryId }),
+    categoryId: z.string().min(1, { message: ERROR_MESSAGE.categoryId }),
 
-    cost: z.coerce.number().nonnegative().nonoptional(),
+    cost: z.coerce.number().nonnegative().optional(),
 
-    basePrice: z.coerce.number().positive({ message: ERROR_MESSAGES.basePrice}),
+    basePrice: z.coerce.number().positive({ message: ERROR_MESSAGE.basePrice }),
 
-    price: z.coerce.number().positive({ message: ERROR_MESSAGES.price}),
+    price: z.coerce.number().positive({ message: ERROR_MESSAGE.price }),
 
-    stock: z.coerce.number().nonnegative({ message: ERROR_MESSAGES.stock}),
-
+    stock: z.coerce.number().positive({ message: ERROR_MESSAGE.stock }),
 
 })

@@ -1,3 +1,4 @@
+'use client';
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -141,7 +142,7 @@ const ProductList = ({ products }: ProductListProps) => {
                                             </div>
                                             {product.basePrice !== product.price && (
                                                 <div className="text-xs line-through text-muted-foreground">
-                                                    {product.price.toLocaleString()}
+                                                    {product.basePrice.toLocaleString()}
                                                 </div>
                                             )}
                                         </TableCell>
