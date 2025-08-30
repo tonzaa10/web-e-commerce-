@@ -28,14 +28,26 @@ import { productAction } from "../actions/products";
 import ErrorMessage from "@/components/shared/error-message";
 import ProductImageUpload from "./product-image-upload";
 
+
 interface ProductFormProps {
   categories: CategoryType[];
 }
 
 const ProductForm = ({ categories }: ProductFormProps) => {
+
+  //Price State
   const [basePrice, setBasePrice] = useState("");
   const [salePrice, setSalePrice] = useState("");
 
+
+  //Image State
+  const [productImages, setProductImages] = useState<File>()
+  const [mainImageIndex, setMainImageIndex] = useState(0)
+  
+  console.log(productImages)
+  console.log(mainImageIndex)
+
+  //Form State
 
   const { errors, formAction, isPending, clearErrors } = useForm(productAction, "/admin/products");
 
@@ -50,6 +62,11 @@ const ProductForm = ({ categories }: ProductFormProps) => {
 
     return `${discount.toFixed(2)}%`;
   };
+
+  const handleImageChange = (images: File[], mainIndex: number) => {
+    setProductImages(images)
+    setMainImageIndex(mainIndex)
+  }
 
   return (
     <Card className="max-w-4xl mx-auto">
@@ -118,7 +135,7 @@ const ProductForm = ({ categories }: ProductFormProps) => {
           </div>
 
           {/* Product Image Section */}
-          <ProductImageUpload/>
+          <ProductImageUpload onImageChange={handleImageChange} />
 
           {/* Pricing Information */}
           <div className="flex flex-col gap-4">
@@ -135,7 +152,7 @@ const ProductForm = ({ categories }: ProductFormProps) => {
                   placeholder="0.00"
                 />
                 {/* Error Message */}
-               {errors.cost && <ErrorMessage error={errors.cost[0]} />}
+                {errors.cost && <ErrorMessage error={errors.cost[0]} />}
               </div>
 
               {/* Best Price */}
