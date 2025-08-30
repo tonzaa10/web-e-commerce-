@@ -26,6 +26,7 @@ import Form from "next/form";
 import { useState } from "react";
 import { productAction } from "../actions/products";
 import ErrorMessage from "@/components/shared/error-message";
+import ProductImageUpload from "./product-image-upload";
 
 interface ProductFormProps {
   categories: CategoryType[];
@@ -115,6 +116,9 @@ const ProductForm = ({ categories }: ProductFormProps) => {
               {errors.categoryId && <ErrorMessage error={errors.categoryId[0]} />}
             </div>
           </div>
+
+          {/* Product Image Section */}
+          <ProductImageUpload/>
 
           {/* Pricing Information */}
           <div className="flex flex-col gap-4">
