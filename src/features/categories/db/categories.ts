@@ -19,7 +19,7 @@ interface UpdateCategoryInput {
   name: string;
 }
 
-export const getCategoies = async () => {
+export const getCategories = async () => {
   "use cache";
 
   cacheLife("days");

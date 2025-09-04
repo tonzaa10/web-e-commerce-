@@ -19,7 +19,6 @@ const ProductImageUpload = ({ onImageChange }: ProductImageUploadProps) => {
     const [previewUrls, setPreviewUrls] = useState<string[]>([]);
     const [mainImageIndex, setMainImageIndex] = useState(0);
 
-    console.log("Selected Files:", selectedFile);
 
     const triggerFileInput = () => {
         if (fileInputRef.current) {
@@ -176,7 +175,7 @@ const ProductImageUpload = ({ onImageChange }: ProductImageUploadProps) => {
                 multiple
                 accept="image/*"
                 className="hidden"
-                onChange={() => handleFileChange(event)}
+                onChange={(event) => handleFileChange(event)}
             />
         </div>
     );

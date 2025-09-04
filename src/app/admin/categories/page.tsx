@@ -1,10 +1,10 @@
 import { Badge } from "@/components/ui/badge";
 import CategoryForm from "@/features/categories/components/category-form";
 import CategoryList from "@/features/categories/components/category-list";
-import { getCategoies } from "@/features/categories/db/categories";
+import { getCategories } from "@/features/categories/db/categories";
 
 const CategoriesAdminPage = async () => {
-    const categories = await getCategoies();
+    const categories = await getCategories();
 
     const activeCategoryCount = categories.filter(
         (c) => c.status === "Active"

@@ -29,34 +29,33 @@ import ErrorMessage from "@/components/shared/error-message";
 import ProductImageUpload from "./product-image-upload";
 
 
+
 interface ProductFormProps {
   categories: CategoryType[];
 }
 
 const ProductForm = ({ categories }: ProductFormProps) => {
-
   //Price State
   const [basePrice, setBasePrice] = useState("");
   const [salePrice, setSalePrice] = useState("");
 
-
   //Image State
-  const [productImages, setProductImages] = useState<File>()
-  const [mainImageIndex, setMainImageIndex] = useState(0)
-  
-  console.log(productImages)
-  console.log(mainImageIndex)
+  const [productImages, setProductImages] = useState<File[]>([]);
+  const [mainImageIndex, setMainImageIndex] = useState(0);
 
   //Form State
 
-  const { errors, formAction, isPending, clearErrors } = useForm(productAction, "/admin/products");
+  const { errors, formAction, isPending, clearErrors } = useForm(
+    productAction,
+    "/admin/products"
+  );
 
   const calculateDiscout = () => {
     const basePriceNum = parseFloat(basePrice) || 0;
     const salePriceNum = parseFloat(salePrice) || 0;
 
-    if (basePriceNum === 0 || salePriceNum === 0) return "0%"
-    if (basePriceNum <= salePriceNum) return "0%"
+    if (basePriceNum === 0 || salePriceNum === 0) return "0%";
+    if (basePriceNum <= salePriceNum) return "0%";
 
     const discount = ((basePriceNum - salePriceNum) / basePriceNum) * 100;
 
@@ -64,8 +63,19 @@ const ProductForm = ({ categories }: ProductFormProps) => {
   };
 
   const handleImageChange = (images: File[], mainIndex: number) => {
-    setProductImages(images)
-    setMainImageIndex(mainIndex)
+    setProductImages(images);
+    setMainImageIndex(mainIndex);
+  };
+
+  const handleSubmit = async (formData: FormData) => {
+
+    if (productImages.length > 0) {
+      productImages.forEach((file) => {
+        formData.append('images', file)
+      })
+      formData.append('main-image-index', mainImageIndex.toString())
+    }
+    return formAction(formData)
   }
 
   return (
@@ -77,7 +87,11 @@ const ProductForm = ({ categories }: ProductFormProps) => {
         <CardDescription>Enter the details of your new product</CardDescription>
       </CardHeader>
 
-      <Form action={formAction} onChange={clearErrors} className="flex flex-col gap-4">
+      <Form
+        action={handleSubmit}
+        onChange={clearErrors}
+        className="flex flex-col gap-4"
+      >
         <CardContent className="flex flex-col gap-6">
           {/* Basic Information */}
           <div className="flex flex-col gap-4">
@@ -107,7 +121,9 @@ const ProductForm = ({ categories }: ProductFormProps) => {
                 className="min-h-20"
               />
               {/* Error Message */}
-              {errors.description && <ErrorMessage error={errors.description[0]} />}
+              {errors.description && (
+                <ErrorMessage error={errors.description[0]} />
+              )}
             </div>
 
             {/* Category Selection */}
@@ -130,7 +146,9 @@ const ProductForm = ({ categories }: ProductFormProps) => {
                 </SelectContent>
               </Select>
               {/* Error Message */}
-              {errors.categoryId && <ErrorMessage error={errors.categoryId[0]} />}
+              {errors.categoryId && (
+                <ErrorMessage error={errors.categoryId[0]} />
+              )}
             </div>
           </div>
 
@@ -169,7 +187,9 @@ const ProductForm = ({ categories }: ProductFormProps) => {
                   onChange={(event) => setBasePrice(event.target.value)}
                 />
                 {/* Error Message */}
-                {errors.basePrice && <ErrorMessage error={errors.basePrice[0]} />}
+                {errors.basePrice && (
+                  <ErrorMessage error={errors.basePrice[0]} />
+                )}
               </div>
 
               {/* Sale Price */}
@@ -182,7 +202,7 @@ const ProductForm = ({ categories }: ProductFormProps) => {
                   step="0.01"
                   placeholder="0.00"
                   required
-                  value={salePrice}
+                  defaultValue={basePrice}
                   onChange={(event) => setSalePrice(event.target.value)}
                 />
                 {/* Error Message */}
@@ -218,7 +238,12 @@ const ProductForm = ({ categories }: ProductFormProps) => {
           </div>
         </CardContent>
         <CardFooter>
-          <SubmitBtn name="Save Product" icon={Save} className="w-full" pending={isPending} />
+          <SubmitBtn
+            name="Save Product"
+            icon={Save}
+            className="w-full"
+            pending={isPending}
+          />
         </CardFooter>
       </Form>
     </Card>
