@@ -183,9 +183,11 @@ const ProductList = ({ products }: ProductListProps) => {
                                                         <Eye size={15} />
                                                         <span>View</span>
                                                     </DropdownMenuItem>
-                                                    <DropdownMenuItem>
-                                                        <Pencil size={15} />
-                                                        <span>Edit</span>
+                                                    <DropdownMenuItem asChild>
+                                                        <Link href={`/admin/products/edit/${product.id}`}>
+                                                            <Pencil size={15} />
+                                                            <span>Edit</span>
+                                                        </Link>
                                                     </DropdownMenuItem>
                                                     <DropdownMenuSeparator />
                                                     {product.status === "Active" ? (
