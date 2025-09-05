@@ -3,12 +3,15 @@ import {
     unstable_cacheLife as cacheLife,
     unstable_cacheTag as cacheTag,
 } from "next/cache";
-import { getProductGlobalTag, getProductIdTag, revalidateProductCache } from "./cache";
+import {
+    getProductGlobalTag,
+    getProductIdTag,
+    revalidateProductCache,
+} from "./cache";
 import { createProductSchema } from "../schemas/products";
 import { authCheck } from "@/features/auths/db/auths";
 import { redirect } from "next/navigation";
 import { canCreateProduct } from "../permissions/products";
-
 
 interface CreateProductInput {
     title: string;
@@ -60,15 +63,13 @@ export const getProducts = async () => {
 };
 
 export const getProductById = async (id: string) => {
+    "use cache";
 
-    'use cache'
-
-    cacheLife("hours")
-    cacheTag(getProductIdTag(id))
-
+    cacheLife("hours");
+    cacheTag(getProductIdTag(id));
 
     try {
-     const product =   await db.product.findFirst({
+        const product = await db.product.findFirst({
             where: { id },
             include: {
                 category: {
@@ -78,36 +79,29 @@ export const getProductById = async (id: string) => {
                         status: true,
                     },
                 },
-                images: {
-                    where: {
-                        isMain: true,
-                    },
-                    take: 1,
-                }
+                images: true,
             },
         });
 
-
-        if(!product){
-            return null
+        if (!product) {
+            return null;
         }
 
         //Find main image of prduct
-        const mainImage = product.images.find((image) => image.isMain)
-
+        const mainImage = product.images.find((image) => image.isMain);
 
         //Find image index of product
-        const mainImageIndex = mainImage ? product.images.findIndex((image) => image.isMain) : 0;
+        const mainImageIndex = mainImage
+            ? product.images.findIndex((image) => image.isMain)
+            : 0;
 
         return {
             ...product,
             lowStock: 5,
-            sku: product.id.substring(0,8).toLocaleUpperCase(),
+            sku: product.id.substring(0, 8).toLocaleUpperCase(),
             mainImage: mainImage || null,
             mainImageIndex,
-        }
-
-
+        };
     } catch (error) {
         console.error("Error getting product by id:", error);
         return null;

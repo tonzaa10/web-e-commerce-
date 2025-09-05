@@ -6,6 +6,6 @@ export interface ProductType extends Product {
     lowStock: number;
     sku: string;
     mainImage?: ProductImage | null;
-    mainImageIndex: number;
-    image: ProductImage[];
+    mainImageIndex?: number;
+    images: ProductImage[];
 }
