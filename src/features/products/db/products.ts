@@ -8,10 +8,13 @@ import {
     getProductIdTag,
     revalidateProductCache,
 } from "./cache";
-import { createProductSchema } from "../schemas/products";
+import { productSchema } from "../schemas/products";
 import { authCheck } from "@/features/auths/db/auths";
 import { redirect } from "next/navigation";
 import { canCreateProduct } from "../permissions/products";
+
+import { deleteFromImageKit } from "@/lib/imageKit";
+
 
 interface CreateProductInput {
     title: string;
@@ -116,7 +119,7 @@ export const createProduct = async (input: CreateProductInput) => {
     }
 
     try {
-        const { success, data, error } = createProductSchema.safeParse(input);
+        const { success, data, error } = productSchema.safeParse(input);
 
         if (!success) {
             return {
@@ -176,6 +179,105 @@ export const createProduct = async (input: CreateProductInput) => {
         console.error("Error createing product:", error);
         return {
             message: "Something went worng. Please try again later.",
+        };
+    }
+};
+
+export const updateProduct = async (
+    input: CreateProductInput & {
+        id: string;
+        deletedImageIds: string[];
+    }
+) => {
+    try {
+        const { success, data, error } = productSchema.safeParse(input);
+        if (!success) {
+            return {
+                message: "Please enter valid product information",
+                error: error.flatten().fieldErrors,
+            };
+        }
+
+        const existingProduct = await db.product.findUnique({
+            where: { id: input.id },
+            include: { images: true },
+        });
+
+        if (!existingProduct) {
+            return {
+                message: "Product not found",
+            };
+        }
+
+        const category = await db.category.findUnique({
+            where: {
+                id: data.categoryId,
+                status: "Active",
+            },
+        });
+
+        if (!category) {
+            return {
+                message: 'Selected category not found or inactive'
+            }
+        }
+
+        if (input.deletedImageIds && input.deletedImageIds.length > 0) {
+            for (const deletedImagId of input.deletedImageIds) {
+                const imageToDelete = existingProduct.images.find((image) => image.id === deletedImagId)
+
+                if (imageToDelete) {
+                    await deleteFromImageKit(imageToDelete.fileId)
+                }
+            }
+        }
+
+        await db.$transaction(async (prisma) => {
+            //Update data product 
+            const product = await prisma.product.update({
+                where: { id: input.id },
+                data: {
+                    title: data.title,
+                    description: data.description,
+                    cost: data.cost,
+                    basePrice: data.basePrice,
+                    price: data.price,
+                    stock: data.stock,
+                    categoryId: data.categoryId
+                }
+            })
+            //Delete image in Database
+            if (input.deletedImageIds && input.deletedImageIds.length > 0) {
+                await prisma.productImage.deleteMany({
+                    where: {
+                        id: {
+                            in: input.deletedImageIds
+                        },
+                        productId: product.id
+                    }
+                })
+            }
+
+            // Set isMain to false
+            await prisma.productImage.updateMany({
+                where:{
+                    productId: product.id
+                },
+                data: {
+                    isMain: false
+                }
+            })
+
+        })
+
+    
+
+
+
+    } catch (error) {
+        console.error("Error updating product:", error);
+        return {
+            message: "Somthing went wrong. Please try again laer",
         };
     }
 };
