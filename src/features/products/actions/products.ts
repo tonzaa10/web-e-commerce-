@@ -1,8 +1,10 @@
 "use server";
 
 import { InitialFormState } from "@/types/action";
-import { createProduct, updateProduct } from "../db/products";
+import { changProductStatus, createProduct, updateProduct } from "../db/products";
 import { uploadToImageKit } from "@/lib/imageKit";
+import { success } from "zod";
+import { tr } from "zod/v4/locales";
 
 export const productAction = async (
     _prevState: InitialFormState,
@@ -71,3 +73,39 @@ export const productAction = async (
                 : "Product created successfully",
         };
 };
+
+export const deleteProductAction = async (_prevState: InitialFormState, formData: FormData) => {
+    const id = formData.get("product-id") as string
+
+    const result = await changProductStatus(id, "Inactive")
+
+    return result && result.message ? {
+        success: false,
+        message: result.message,
+    } : {
+        success: true,
+        message: 'Product deleted successfully'
+
+    }
+
+}
+
+
+
+export const restoreProductAction = async (_prevState: InitialFormState, formData: FormData) => {
+    const id = formData.get("product-id") as string
+
+    const result = await changProductStatus(id, "Active")
+
+    return result && result.message ? {
+        success: false,
+        message: result.message,
+    } : {
+        success: true,
+        message: 'Product Restore successfully'
+
+    }
+
+}
+
+

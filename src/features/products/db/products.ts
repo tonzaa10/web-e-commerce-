@@ -328,6 +328,11 @@ export const updateProduct = async (
 };
 
 export const changProductStatus = async (id: string, status: ProductStatus) => {
+    
+    const user = await authCheck();
+    if (!user || canUpdaeProduct(user))
+        redirect('/')
+
     try {
         const product = await db.product.findUnique({
             where: { id }
