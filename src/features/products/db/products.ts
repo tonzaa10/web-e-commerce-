@@ -232,8 +232,8 @@ export const updateProduct = async (
             }
         }
 
-        await db.$transaction(async (prisma) => {
-            //Update data product 
+        const updatedProduct = await db.$transaction(async (prisma) => {
+            //1.Update data product 
             const product = await prisma.product.update({
                 where: { id: input.id },
                 data: {
@@ -246,7 +246,7 @@ export const updateProduct = async (
                     categoryId: data.categoryId
                 }
             })
-            //Delete image in Database
+            //2.Delete image in Database
             if (input.deletedImageIds && input.deletedImageIds.length > 0) {
                 await prisma.productImage.deleteMany({
                     where: {
@@ -258,9 +258,9 @@ export const updateProduct = async (
                 })
             }
 
-            // Set isMain to false
+            //3.Set isMain to false
             await prisma.productImage.updateMany({
-                where:{
+                where: {
                     productId: product.id
                 },
                 data: {
@@ -268,11 +268,50 @@ export const updateProduct = async (
                 }
             })
 
+            //4.Update new image
+            if (input.images && input.images.length > 0) {
+                await Promise.all(
+                    input.images.map((image) => {
+                        return prisma.productImage.create({
+                            data: {
+                                url: image.url,
+                                fileId: image.fileId,
+                                isMain: false,
+                                productId: product.id
+                            }
+                        })
+                    })
+                )
+            }
+
+            //5.Find all image and set image
+            const allImage = await prisma.productImage.findMany({
+                where: {
+                    productId: product.id
+                },
+                orderBy: {
+                    createdAt: 'asc'
+                }
+            })
+
+            if (allImage.length > 0) {
+                const validIndex = Math.min(input.mainImageIndex, allImage.length - 1)
+                if (validIndex >= 0) {
+                    await prisma.productImage.update({
+                        where: {
+                            id: allImage[validIndex].id
+                        },
+                        data: {
+                            isMain: true
+                        }
+                    })
+                }
+            }
+
+            return product
+
         })
-
-    
-
-
+        revalidateProductCache(updatedProduct.id)
 
     } catch (error) {
         console.error("Error updating product:", error);
