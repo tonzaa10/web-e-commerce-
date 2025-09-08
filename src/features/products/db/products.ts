@@ -11,9 +11,10 @@ import {
 import { productSchema } from "../schemas/products";
 import { authCheck } from "@/features/auths/db/auths";
 import { redirect } from "next/navigation";
-import { canCreateProduct } from "../permissions/products";
+import { canCreateProduct, canUpdaeProduct } from "../permissions/products";
 
 import { deleteFromImageKit } from "@/lib/imageKit";
+import { ProductStatus } from "@prisma/client";
 
 
 interface CreateProductInput {
@@ -189,6 +190,11 @@ export const updateProduct = async (
         deletedImageIds: string[];
     }
 ) => {
+
+    const user = await authCheck()
+    if (!user || !canUpdaeProduct(user)) {
+        redirect('/')
+    }
     try {
         const { success, data, error } = productSchema.safeParse(input);
         if (!success) {
@@ -320,3 +326,36 @@ export const updateProduct = async (
         };
     }
 };
+
+export const changProductStatus = async (id: string, status: ProductStatus) => {
+    try {
+        const product = await db.product.findUnique({
+            where: { id }
+        })
+
+        if (!product) {
+            return {
+                message: "Product not found"
+            }
+        }
+
+        if (product.status === status) {
+            return {
+                message: `Product is already ${status.toLowerCase()}`
+            }
+        }
+
+        const updatedProduct = await db.product.update({
+            where: { id },
+            data: { status }
+        })
+
+        revalidateProductCache(updatedProduct.id)
+
+    } catch (error) {
+        console.error("Error changing product status:", error)
+        return {
+            message: " Something went wrong.Please try again later"
+        }
+    }
+}
