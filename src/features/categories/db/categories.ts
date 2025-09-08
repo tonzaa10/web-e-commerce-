@@ -6,7 +6,10 @@ import {
 import { getCategoryGlobalTag, revalidateCategoryCache } from "./cache";
 import { categorySchema } from "@/features/categories/schemas/categories";
 import { authCheck } from "@/features/auths/db/auths";
-import { canCreateCategory, canUpdateCategory } from "@/features/categories/permissions/categories";
+import {
+  canCreateCategory,
+  canUpdateCategory,
+} from "@/features/categories/permissions/categories";
 import { redirect } from "next/navigation";
 import { CategoryStatus } from "@prisma/client";
 
@@ -35,7 +38,7 @@ export const getCategories = async () => {
       },
     });
   } catch (error) {
-    console.error("Error getting categories data :", error);
+    console.error("Error getting categories data:", error);
     return [];
   }
 };
@@ -57,7 +60,7 @@ export const createCategory = async (input: CreateCategoryInput) => {
       };
     }
 
-    // Check Category already exists from ddatabase
+    // Check category already exists from database
     const category = await db.category.findFirst({
       where: {
         name: data.name,
@@ -79,9 +82,9 @@ export const createCategory = async (input: CreateCategoryInput) => {
 
     revalidateCategoryCache(newCategory.id);
   } catch (error) {
-    console.error("Error ccreating new category :", error);
+    console.error("Error creating new category:", error);
     return {
-      message: "Someting went worng. Please try again later",
+      message: "Something went wrong. Please try again later",
     };
   }
 };
@@ -150,53 +153,54 @@ export const updateCategory = async (input: UpdateCategoryInput) => {
   }
 };
 
-export const changeCategoryStatus = async (id: string, status: CategoryStatus) => {
+export const changeCategoryStatus = async (
+  id: string,
+  status: CategoryStatus,
+) => {
+  const user = await authCheck();
 
-
-  const user = await authCheck()
   if (!user || !canUpdateCategory(user)) {
-    redirect('/')
+    redirect("/");
   }
 
   try {
-    //Check it category exists
+    // Check if category exists
     const existsCategory = await db.category.findUnique({
-      where: { id }
-    })
+      where: { id },
+    });
 
     if (!existsCategory) {
       return {
-        message: 'Category not found'
-      }
+        message: "Category not found",
+      };
     }
 
-    //if status is already
+    // if status is already
     if (existsCategory.status === status) {
       return {
-        message: `Category is already ${status.toLocaleLowerCase()}`
-      }
+        message: `Category is already ${status.toLowerCase()}`,
+      };
     }
 
-    //Update status
+    // Update status
     const updatedCategory = await db.category.update({
-      where: { id },
-      data: { status } //status : status
-    })
+      where: { id }, // id: id
+      data: { status }, // status: status
+    });
 
-    revalidateCategoryCache(updatedCategory.id)
-
+    revalidateCategoryCache(updatedCategory.id);
   } catch (error) {
-    console.error('Error changing caregory status', error)
+    console.error("Error changing category status:", error);
     return {
-      message: 'Something went wrong. Please try again later'
-    }
+      message: "Something went wrong. Please try again later",
+    };
   }
-}
+};
 
 export const removeCategory = async (id: string) => {
-  return await changeCategoryStatus(id, 'Inactive')
-}
+  return await changeCategoryStatus(id, "Inactive");
+};
 
 export const restoreCategory = async (id: string) => {
-  return await changeCategoryStatus(id, "Active")
-}
+  return await changeCategoryStatus(id, "Active");
+};

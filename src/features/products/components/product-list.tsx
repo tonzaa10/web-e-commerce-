@@ -32,12 +32,32 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import DeleteProductModal from "./delete-product-modal";
+import { useState } from "react";
+import RestoreProductModal from "./restore-product-modal";
 
 interface ProductListProps {
     products: ProductType[];
 }
 
 const ProductList = ({ products }: ProductListProps) => {
+
+
+    const [isDeleteModal, setIsDeleteModal] = useState(false)
+    const [isRestoreModal, setIsRestoreModal] = useState(false)
+
+    const [selectedProduct, setSelectedProduct] = useState<ProductType | null>(null)
+
+    const handleDeleteClick = (product: ProductType) => {
+        setSelectedProduct(product)
+        setIsDeleteModal(true)
+    }
+
+     const handleRestoreClick = (product: ProductType) => {
+        setSelectedProduct(product)
+        setIsRestoreModal(true)
+    }
+
     return (
         <>
             <Card>
@@ -191,12 +211,12 @@ const ProductList = ({ products }: ProductListProps) => {
                                                     </DropdownMenuItem>
                                                     <DropdownMenuSeparator />
                                                     {product.status === "Active" ? (
-                                                        <DropdownMenuItem>
+                                                        <DropdownMenuItem onClick={() => handleDeleteClick(product)}>
                                                             <Trash2 size={15} className="text-destructive" />
                                                             <span className="text-destructive">Delete</span>
                                                         </DropdownMenuItem>
                                                     ) : (
-                                                        <DropdownMenuItem>
+                                                        <DropdownMenuItem onClick={() => handleRestoreClick(product) }>
                                                             <RefreshCcw
                                                                 size={15}
                                                                 className="text-green-600"
@@ -223,6 +243,10 @@ const ProductList = ({ products }: ProductListProps) => {
                     </Table>
                 </CardContent>
             </Card>
+
+            <DeleteProductModal open={isDeleteModal} onOpenChange={setIsDeleteModal} product={selectedProduct} />
+            <RestoreProductModal open={isRestoreModal} onOpenChange={setIsRestoreModal} product={selectedProduct} />
+            
         </>
     );
 };

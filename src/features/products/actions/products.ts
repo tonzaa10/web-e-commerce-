@@ -1,10 +1,8 @@
 "use server";
 
 import { InitialFormState } from "@/types/action";
-import { changProductStatus, createProduct, updateProduct } from "../db/products";
+import { changeProductStatus, createProduct, updateProduct } from "../db/products";
 import { uploadToImageKit } from "@/lib/imageKit";
-import { success } from "zod";
-import { tr } from "zod/v4/locales";
 
 export const productAction = async (
     _prevState: InitialFormState,
@@ -74,38 +72,40 @@ export const productAction = async (
         };
 };
 
-export const deleteProductAction = async (_prevState: InitialFormState, formData: FormData) => {
-    const id = formData.get("product-id") as string
+export const deleteProductAction = async (
+    _prevState: InitialFormState,
+    formData: FormData,
+) => {
+    const id = formData.get("product-id") as string;
 
-    const result = await changProductStatus(id, "Inactive")
+    const result = await changeProductStatus(id, "Inactive");
 
-    return result && result.message ? {
-        success: false,
-        message: result.message,
-    } : {
-        success: true,
-        message: 'Product deleted successfully'
+    return result && result.message
+        ? {
+            success: false,
+            message: result.message,
+        }
+        : {
+            success: true,
+            message: "Product deleted successfully",
+        };
+};
 
-    }
+export const restoreProductAction = async (
+    _prevState: InitialFormState,
+    formData: FormData,
+) => {
+    const id = formData.get("product-id") as string;
 
-}
+    const result = await changeProductStatus(id, "Active");
 
-
-
-export const restoreProductAction = async (_prevState: InitialFormState, formData: FormData) => {
-    const id = formData.get("product-id") as string
-
-    const result = await changProductStatus(id, "Active")
-
-    return result && result.message ? {
-        success: false,
-        message: result.message,
-    } : {
-        success: true,
-        message: 'Product Restore successfully'
-
-    }
-
-}
-
-
+    return result && result.message
+        ? {
+            success: false,
+            message: result.message,
+        }
+        : {
+            success: true,
+            message: "Product restored successfully",
+        };
+};

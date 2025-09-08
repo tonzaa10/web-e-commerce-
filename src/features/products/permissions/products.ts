@@ -4,6 +4,6 @@ export const canCreateProduct = (user: UserType) => {
   return user.role === "Admin";
 };
 
-export const canUpdaeProduct = (user: UserType) => {
+export const canUpdateProduct = (user: UserType) => {
   return user.role === "Admin";
 };
