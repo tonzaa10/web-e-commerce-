@@ -8,6 +8,8 @@ import { Clock, DollarSign, FileText, Package, ShoppingBag, Tag } from "lucide-r
 import Image from "next/image";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { formatPrice } from "@/lib/formatPrice";
+import { Separator } from "@/components/ui/separator";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
 interface ProductDetailModalProps {
   open: boolean;
@@ -177,7 +179,7 @@ const ProductDetailModal = ({
                     </div>
                     <div className="flex flex-col items-center justify-center bg-muted rounded-md p-2">
                       <FileText size={20} className="text-amber-500" />
-                      <span className="font-bold">{product.cost > 0 ? formatPrice(product.sold * (product.price - product.cost)): 'N/A'}</span>
+                      <span className="font-bold">{product.cost > 0 ? formatPrice(product.sold * (product.price - product.cost)) : 'N/A'}</span>
                       <span className="text-xs text-muted-foreground">Profit</span>
                     </div>
                   </div>
@@ -187,7 +189,82 @@ const ProductDetailModal = ({
             </ScrollArea>
           </TabsContent>
 
-          <TabsContent value="details">Details</TabsContent>
+          <TabsContent value="details">
+            <ScrollArea className="max-h-[500px] overflow-y-auto">
+              <Card className="break-all">
+                <CardContent className="space-y-4">
+                  <div className="flex flex-col gap-2">
+                    <h3 className="text-sm font-semibold">Product Detail</h3>
+                    <p className="text-sm text-muted-foreground">{product.description}</p>
+                  </div>
+
+                  <Separator />
+
+                  <div>
+                    <h3 className="text-sm font-semibold mb-2">Spaecific information</h3>
+                    <div className="grid grid-cols-2 gap-2 text-sm">
+                      <div>
+                        <h2 className="text-muted-foreground">SKU</h2>
+                        <p className="font-medium">{product.sku}</p>
+                      </div>
+                      <div>
+                        <h2 className="text-muted-foreground">Category</h2>
+                        <p className="font-medium">{product.category.name}</p>
+                      </div>
+                      <div>
+                        <h2 className="text-muted-foreground">Status</h2>
+                        <Badge variant={product.status === 'Active' ? 'default' : 'destructive'}>{product.status}</Badge>
+                      </div>
+                      <div>
+                        <h2 className="text-muted-foreground">Stock</h2>
+                        <p className={`font-medium ${stockColor}`}>{product.stock}</p>
+                      </div>
+                      <div>
+                        <h2 className="text-muted-foreground">Base Price</h2>
+                        <p className="font-medium">{formatPrice(product.basePrice)}</p>
+                      </div>
+                      <div>
+                        <h2 className="text-muted-foreground">Sale Price</h2>
+                        <p className="font-medium">{formatPrice(product.price)}</p>
+                      </div>
+                      <div>
+                        <h2 className="text-muted-foreground">Discount</h2>
+                        <p className="font-medium">{discount}%</p>
+                      </div>
+                      <div>
+                        <h2 className="text-muted-foreground">Created at</h2>
+                        <p className="font-medium">{dayjs(product.createdAt).format('ll')}</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <Separator />
+                  <div>
+                    <h4 className='text-sm font-semibold mb-2'>Sales information</h4>
+                    <Table>
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead>Total sales</TableHead>
+                          <TableHead>Income</TableHead>
+                          <TableHead>Total cost</TableHead>
+                          <TableHead>Profit</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        <TableRow>
+                          <TableCell>{product.sold} items</TableCell>
+                          <TableCell>{formatPrice(product.sold * product.price)}</TableCell>
+                          <TableCell>{formatPrice(product.sold * product.cost)}</TableCell>
+                          <TableCell>{formatPrice(product.sold * (product.price - product.cost))}</TableCell>
+                        </TableRow>
+                      </TableBody>
+                    </Table>
+                  </div>
+                </CardContent>
+              </Card>
+            </ScrollArea>
+          </TabsContent>
+
           <TabsContent value="images">Images</TabsContent>
 
         </Tabs>
