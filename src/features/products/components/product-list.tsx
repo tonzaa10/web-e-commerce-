@@ -45,6 +45,7 @@ const ProductList = ({ products }: ProductListProps) => {
     //Tab
     const [activeTab, setActiveTab] = useState('all')
     const [filteredProducts, setFilteredProducts] = useState(products)
+    const [searchTerm, setSearchTerm] = useState('')
 
     //Modal State
     const [isDeleteModal, setIsDeleteModal] = useState(false)
@@ -60,12 +61,21 @@ const ProductList = ({ products }: ProductListProps) => {
         } else if (activeTab === "low-stock") {
             result = result.filter((p) => p.stock <= p.lowStock)
         }
+
+        if(searchTerm) {
+            result = result.filter((p) => p.title.toLowerCase().includes(searchTerm.toLowerCase()))
+        }
+
         setFilteredProducts(result)
-    }, [products, activeTab])
+    }, [products, activeTab, searchTerm])
 
 
     const hadleTabChange = (value: string) => {
         setActiveTab(value)
+    }
+
+    const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setSearchTerm(event.target.value)
     }
 
 
@@ -133,7 +143,7 @@ const ProductList = ({ products }: ProductListProps) => {
                                     size={16}
                                     className="absolute left-2 top-2.5 text-muted-foreground"
                                 />
-                                <Input placeholder="Search products..." className="pl-8" />
+                                <Input placeholder="Search products..." className="pl-8" onChange={(event) => handleSearch(event)} />
                             </div>
                         </div>
                     </Tabs>
