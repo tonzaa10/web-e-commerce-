@@ -1,5 +1,7 @@
 import { Badge } from '@/components/ui/badge'
-import { Card } from '@/components/ui/card'
+import { Card, CardContent } from '@/components/ui/card'
+import { formatPrice } from '@/lib/formatPrice'
+import { cn } from '@/lib/utils'
 import { ProductType } from '@/types/product'
 import { Divide } from 'lucide-react'
 import Image from 'next/image'
@@ -35,6 +37,30 @@ const ProductCard = ({ product }: ProductCardProps) => {
                     )}
                 </div>
             </Link>
+
+            <CardContent className='p-4'>
+                <div className='space-y-2'>
+                    <Link href={`/products/${product.id}`}>
+                        <h3 className='font-medium line-clamp-2 min-h-[18px] group-hover:text-primary transition-colors duration-500'>{product.title}</h3>
+                    </Link>
+                    <div className='flex justify-between items-baseline'>
+                        <div className='flex flex-col '>
+                            <span className='font-medium text-lg'>{formatPrice(product.price)}</span>
+                            {product.basePrice > product.price && (
+                                <span className='text-sm line-through text-muted-foreground'>
+                                    {formatPrice(product.basePrice)}
+                                </span>
+                            )}
+                        </div>
+                        {product.stock > 0 ? (
+                            <Badge variant='outline' className={cn('transition-colors', product.stock <= product.lowStock ? "text-amber-500 border-amber-500" : 'text-green-600 border-green-600')}>
+                                {product.stock <= product.lowStock ? 'เหลือน้อย' : 'พร้อมส่ง'}
+                            </Badge>
+                        ) : <Badge variant='outline' className='text-destructive border-destructive'>สินค้าหมด</Badge>}
+                    </div>
+                </div>
+            </CardContent>
+
             
         </Card>
     )
