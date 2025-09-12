@@ -47,6 +47,7 @@ model User {
   tel       String?
   createdAt DateTime   @default(now())
   updatedAt DateTime
+  cart      Cart[]
 }
 
 model Category {
@@ -74,6 +75,7 @@ model Product {
   categoryId String
   category   Category       @relation(fields: [categoryId], references: [id])
   images     ProductImage[]
+  cartItems  CartItem[]
 }
 
 model ProductImage {
@@ -83,6 +85,29 @@ model ProductImage {
   isMain    Boolean  @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  productId String
+  product   Product @relation(fields: [productId], references: [id])
+}
+
+model Cart {
+  id        String   @id @default(uuid())
+  cartTotal Float    @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime
+
+  orderedById String
+  orderedBy   User       @relation(fields: [orderedById], references: [id])
+  products    CartItem[]
+}
+
+model CartItem {
+  id    String @id @default(uuid())
+  count Int    @default(1)
+  price Float
+
+  cartId String
+  cart   Cart   @relation(fields: [cartId], references: [id], onDelete: Cascade)
 
   productId String
   product   Product @relation(fields: [productId], references: [id])
