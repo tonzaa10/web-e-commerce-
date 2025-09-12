@@ -5,6 +5,7 @@ import {
 } from 'next/cache'
 import { getCartTag } from "./cache";
 import { db } from "@/lib/db";
+import { time } from "console";
 
 export const getUserCart = async (userId: string | null) => {
 
@@ -67,3 +68,33 @@ export const getUserCart = async (userId: string | null) => {
         return null
     }
 };
+
+export const getCartItemCount = async (userId: string | null) => {
+
+    'use cache'
+
+    if (!userId) {
+        redirect('/auth/signin')
+    }
+    cacheLife('hours')
+    cacheTag(getCartTag(userId))
+
+    try {
+        const cart = await db.cart.findFirst({
+            where: {
+                orderedById: userId
+            },
+            include: {
+                products: true,
+            }
+        })
+
+        if (!cart) return 0
+
+        return cart.products.reduce((sum, item) => sum + item.count, 0)
+
+    } catch (error) {
+        console.error('Error getting cart item count :', error)
+        return 0
+    }
+}
