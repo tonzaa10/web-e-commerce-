@@ -33,7 +33,7 @@ import { ProductType } from "@/types/product";
 
 interface ProductFormProps {
   categories: CategoryType[];
-  product: ProductType | null;
+  product?: ProductType;
 }
 
 const  ProductForm = ({ categories, product }: ProductFormProps) => {
