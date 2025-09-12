@@ -15,6 +15,7 @@ import { canCreateProduct, canUpdateProduct } from "../permissions/products";
 
 import { deleteFromImageKit } from "@/lib/imageKit";
 import { ProductStatus } from "@prisma/client";
+import { tr } from "zod/v4/locales";
 
 
 interface CreateProductInput {
@@ -113,6 +114,46 @@ export const getProductById = async (id: string) => {
         return null;
     }
 };
+
+export const getFeatureProducts = async () => {
+    'use cache'
+    cacheLife('hours')
+    cacheTag(getProductGlobalTag())
+
+    try {
+        const product = await db.product.findMany({
+            take: 8,
+            where: {
+                status: 'Active'
+            },
+            orderBy: {
+                sold: 'desc',
+            },
+            include: {
+                category: {
+                    select: {
+                        id: true,
+                        name: true,
+                        status: true
+                    },
+                },
+                images: true,
+            }
+        })
+        return product.map((product) => {
+            const mainImage = product.images.find((image) => image.isMain)
+            return {
+                ...product,
+                lowStock: 5,
+                sku: product.id.substring(0, 8).toUpperCase(),
+                mainImage
+            }
+        })
+    } catch (error) {
+        console.error('Error getting feature product:', error)
+        return []
+    }
+}
 
 export const createProduct = async (input: CreateProductInput) => {
     const user = await authCheck();
