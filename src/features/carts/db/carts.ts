@@ -5,7 +5,7 @@ import {
 } from 'next/cache'
 import { getCartTag } from "./cache";
 import { db } from "@/lib/db";
-import { time } from "console";
+
 
 export const getUserCart = async (userId: string | null) => {
 
@@ -97,4 +97,16 @@ export const getCartItemCount = async (userId: string | null) => {
         console.error('Error getting cart item count :', error)
         return 0
     }
+}
+
+const recalculateCartTotal = async (cartId: string) => {
+    const cartItems = await db.cartItem.findMany({
+        where: { cartId },
+    })
+
+    const cartTotal = cartItems.reduce((total, item) => total + item.price, 0)
+    await db.cart.update({
+        where: { id: cartId },
+        data: { cartTotal }
+    })
 }
