@@ -8,7 +8,6 @@ import { db } from "@/lib/db";
 
 import { authCheck } from "@/features/auths/db/auths";
 import { canUpdateUserCart } from "../permissions/cart";
-import { AwardIcon } from "lucide-react";
 
 interface AddToCartInput {
     productId: string;
@@ -304,6 +303,44 @@ export const removeFromCart = async (cartItemID: string) => {
         console.error('Error removing from cart:', error)
         return {
             message: 'ไม่สามารถลบรายการสินค้านี้ออกจากตะกร้าได้'
+        }
+    }
+}
+
+export const clearCart = async () => {
+    const user = await authCheck()
+    if (!user || !canUpdateUserCart(user)) {
+        redirect('/auth/signin')
+    }
+
+    try {
+        const cart = await db.cart.findFirst({
+            where: {
+                orderedById: user.id,
+            }
+        })
+
+        if (!cart) {
+            return {
+                message: 'ตะกร้าของคุณไม่มีสินค้า'
+            }
+        }
+
+        await db.cartItem.deleteMany({
+            where: { cartId: cart.id }
+        })
+
+        await db.cart.update({
+            where: { id: cart.id },
+            data: { cartTotal: 0 }
+        })
+
+        recalculateCartTotal(user.id)
+
+    } catch (error) {
+        console.error('Ener cleaing cart :', error)
+        return {
+            message: 'ไม่สามารถเคลียร์ตะกร้าได้'
         }
     }
 }
