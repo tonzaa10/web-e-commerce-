@@ -3,9 +3,16 @@ import {
     unstable_cacheLife as cacheLife,
     unstable_cacheTag as cacheTag,
 } from 'next/cache'
-import { getCartTag } from "./cache";
+import { getCartTag, revalidateCartCache } from "./cache";
 import { db } from "@/lib/db";
 
+import { authCheck } from "@/features/auths/db/auths";
+import { canUpdateUserCart } from "../permissions/cart";
+
+interface AddToCartInput {
+    productId: string;
+    count: number;
+}
 
 export const getUserCart = async (userId: string | null) => {
 
@@ -109,4 +116,90 @@ const recalculateCartTotal = async (cartId: string) => {
         where: { id: cartId },
         data: { cartTotal }
     })
+}
+
+export const addToCart = async (input: AddToCartInput) => {
+
+    const user = await authCheck()
+    if (!user || !canUpdateUserCart(user)) {
+        redirect('/auth/signin')
+    }
+
+    try {
+
+        const product = await db.product.findUnique({
+            where: {
+                id: input.productId,
+                status: 'Active'
+            }
+        })
+
+        if (!product) {
+            return {
+                message: 'ไม่มีสินค้าหรือไม่จำหน่าย'
+            }
+        }
+
+        if (product.stock < input.count) {
+            return {
+                message: 'สต๊อกสินค้าไม่เพียงพอ'
+            }
+        }
+
+        let cart = await db.cart.findFirst({
+            where: {
+                orderedById: user.id,
+            }
+        });
+
+        if (!cart) {
+            cart = await db.cart.create({
+                data: {
+                    cartTotal: 0,
+                    orderedById: user.id,
+                    updatedAt: new Date(),
+                    createdAt: new Date(),
+                },
+            })
+        }
+
+        const existingProduct = await db.cartItem.findFirst({
+            where:{
+                cartId: cart.id,
+                productId: product.id
+            }
+        })
+
+        if(existingProduct){
+            await db.cartItem.update({
+                where: {
+                    id: existingProduct.id,
+
+                },
+                data: {
+                    count: existingProduct.count + input.count,
+                    price: (existingProduct .count + input.count) * product.price
+                }
+            })
+        } else {
+            await db.cartItem.create ({
+                data: {
+                    count: input.count,
+                    price: product.price * input.count,
+                    cartId: cart.id,
+                    productId: product.id 
+                }
+            })
+        }
+
+        await recalculateCartTotal(cart.id)
+
+        revalidateCartCache(user.id)
+
+    } catch (error) {
+        console.error('Error adding to cart:', error)
+        return {
+            message: 'เกิดข้อผิดพลาดในการเพิ่มสินค้าในตะกร้า'
+        }
+    }
 }
