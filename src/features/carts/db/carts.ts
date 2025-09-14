@@ -8,7 +8,7 @@ import { db } from "@/lib/db";
 
 import { authCheck } from "@/features/auths/db/auths";
 import { canUpdateUserCart } from "../permissions/cart";
-import { tr } from "zod/v4/locales";
+import { AwardIcon } from "lucide-react";
 
 interface AddToCartInput {
     productId: string;
@@ -267,5 +267,43 @@ export const updateCartItem = async (input: UpdateCartInput) => {
             message: 'เกิดข้อผิดพลาดในการอัพเดทสินค้า'
         }
 
+    }
+}
+
+export const removeFromCart = async (cartItemID: string) => {
+
+    const user = await authCheck()
+    if (!user || !canUpdateUserCart(user)) {
+        redirect('/auth/signin')
+    }
+
+    try {
+
+        const cartItem = await db.cartItem.findUnique({
+            where: { id: cartItemID },
+            include: {
+                cart: true,
+            }
+        })
+
+        if (!cartItem || cartItem.cart.orderedById !== user.id) {
+            return {
+                message: 'ไม่พบสินค้าในตะกร้า'
+            }
+        }
+
+        await db.cartItem.delete({
+            where: { id: cartItemID },
+        })
+
+        await recalculateCartTotal(cartItem.cartId)
+
+        revalidateCartCache(user.id)
+
+    } catch (error) {
+        console.error('Error removing from cart:', error)
+        return {
+            message: 'ไม่สามารถลบรายการสินค้านี้ออกจากตะกร้าได้'
+        }
     }
 }
