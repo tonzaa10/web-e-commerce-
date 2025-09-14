@@ -335,7 +335,7 @@ export const clearCart = async () => {
             data: { cartTotal: 0 }
         })
 
-        recalculateCartTotal(user.id)
+        revalidateCartCache(user.id)
 
     } catch (error) {
         console.error('Ener cleaing cart :', error)
