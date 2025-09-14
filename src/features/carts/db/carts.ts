@@ -8,10 +8,16 @@ import { db } from "@/lib/db";
 
 import { authCheck } from "@/features/auths/db/auths";
 import { canUpdateUserCart } from "../permissions/cart";
+import { tr } from "zod/v4/locales";
 
 interface AddToCartInput {
     productId: string;
     count: number;
+}
+
+interface UpdateCartInput {
+    cartItmeId: string;
+    newCount: number;
 }
 
 export const getUserCart = async (userId: string | null) => {
@@ -27,6 +33,9 @@ export const getUserCart = async (userId: string | null) => {
 
     try {
         const cart = await db.cart.findFirst({
+            orderBy: {
+                createdAt: 'asc',
+            },
             where: {
                 orderedById: userId
             },
@@ -164,13 +173,13 @@ export const addToCart = async (input: AddToCartInput) => {
         }
 
         const existingProduct = await db.cartItem.findFirst({
-            where:{
+            where: {
                 cartId: cart.id,
                 productId: product.id
             }
         })
 
-        if(existingProduct){
+        if (existingProduct) {
             await db.cartItem.update({
                 where: {
                     id: existingProduct.id,
@@ -178,16 +187,16 @@ export const addToCart = async (input: AddToCartInput) => {
                 },
                 data: {
                     count: existingProduct.count + input.count,
-                    price: (existingProduct .count + input.count) * product.price
+                    price: (existingProduct.count + input.count) * product.price
                 }
             })
         } else {
-            await db.cartItem.create ({
+            await db.cartItem.create({
                 data: {
                     count: input.count,
                     price: product.price * input.count,
                     cartId: cart.id,
-                    productId: product.id 
+                    productId: product.id
                 }
             })
         }
@@ -201,5 +210,62 @@ export const addToCart = async (input: AddToCartInput) => {
         return {
             message: 'เกิดข้อผิดพลาดในการเพิ่มสินค้าในตะกร้า'
         }
+    }
+}
+
+export const updateCartItem = async (input: UpdateCartInput) => {
+
+    const user = await authCheck()
+
+    if (!user || !canUpdateUserCart(user)) {
+        redirect('/auth/signin')
+    }
+
+    try {
+
+        if (input.newCount < 1) {
+            return {
+                message: 'จำนวนสินค้าต้องมีอย่างน้อง 1 ชิ้น'
+            }
+        }
+
+        const cartItme = await db.cartItem.findUnique({
+            where: { id: input.cartItmeId },
+            include: {
+                cart: true,
+                product: true,
+            }
+        })
+
+        if (!cartItme || cartItme.cart.orderedById !== user.id) {
+            return {
+                message: 'ไม่พบสินค้าในตะกร้า'
+            }
+        }
+
+        if (cartItme.product.stock < input.newCount) {
+            return {
+                message: 'สต๊อกสินค้าไม่เพียงพอ'
+            }
+        }
+
+        await db.cartItem.update({
+            where: { id: input.cartItmeId },
+            data: {
+                count: input.newCount,
+                price: cartItme.product.price * input.newCount
+            }
+        })
+
+        await recalculateCartTotal(cartItme.cartId)
+
+        revalidateCartCache(user.id)
+
+    } catch (error) {
+        console.error('Error updating cart :', error)
+        return {
+            message: 'เกิดข้อผิดพลาดในการอัพเดทสินค้า'
+        }
+
     }
 }
