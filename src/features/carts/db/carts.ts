@@ -15,7 +15,7 @@ interface AddToCartInput {
 }
 
 interface UpdateCartInput {
-    cartItmeId: string;
+    cartItemId: string;
     newCount: number;
 }
 
@@ -228,35 +228,35 @@ export const updateCartItem = async (input: UpdateCartInput) => {
             }
         }
 
-        const cartItme = await db.cartItem.findUnique({
-            where: { id: input.cartItmeId },
+        const cartItem = await db.cartItem.findUnique({
+            where: { id: input.cartItemId },
             include: {
                 cart: true,
                 product: true,
             }
         })
 
-        if (!cartItme || cartItme.cart.orderedById !== user.id) {
+        if (!cartItem || cartItem.cart.orderedById !== user.id) {
             return {
                 message: 'ไม่พบสินค้าในตะกร้า'
             }
         }
 
-        if (cartItme.product.stock < input.newCount) {
+        if (cartItem.product.stock < input.newCount) {
             return {
                 message: 'สต๊อกสินค้าไม่เพียงพอ'
             }
         }
 
         await db.cartItem.update({
-            where: { id: input.cartItmeId },
+            where: { id: input.cartItemId },
             data: {
                 count: input.newCount,
-                price: cartItme.product.price * input.newCount
+                price: cartItem.product.price * input.newCount
             }
         })
 
-        await recalculateCartTotal(cartItme.cartId)
+        await recalculateCartTotal(cartItem.cartId)
 
         revalidateCartCache(user.id)
 
