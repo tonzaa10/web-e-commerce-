@@ -4,11 +4,11 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card'
 import { formatPrice } from '@/lib/formatPrice';
 import { CartType } from '@/types/cart'
-import { Minus, Plus } from 'lucide-react';
+import { Minus, Plus, Trash2 } from 'lucide-react';
 import Image from 'next/image'
 import Link from 'next/link'
-import { useTransition } from 'react';
-import { updateCartItemAction } from '../actions/cart';
+
+import { removeFromCartAction, updateCartItemAction } from '../actions/cart';
 import { toast } from 'sonner';
 
 interface CartItemsProps {
@@ -19,21 +19,26 @@ interface CartItemsProps {
 
 const CartItems = ({ cart }: CartItemsProps) => {
 
-    //const [isPending, startTrasition] = useTransition()
+
 
     if (!cart) return null
 
     const handleUpdateQty = async (itemId: string, newCount: number) => {
-        //startTrasition(async () => {
 
         const formData = new FormData;
         formData.append('cart-item-id', itemId)
         formData.append('new-count', newCount.toString())
 
-
         const result = await updateCartItemAction(formData)
 
         if (result && !result.message) {
+            toast.error(result.message)
+        }
+    }
+
+    const handleRemoveItem = async (itemId: string) => {
+        const result = await removeFromCartAction(itemId)
+        if(result && result.message){
             toast.error(result.message)
         }
     }
@@ -68,7 +73,7 @@ const CartItems = ({ cart }: CartItemsProps) => {
                         <div className='text-sm text-muted-foreground'>ประเภท: {item.product.category.name}</div>
                         <div className='text-sm text-muted-foreground'>ราคาต่อหน่ยว: {formatPrice(item.product.price)} </div>
 
-                        <div>
+                        <div className='flex items-center justify-between mt-2'>
                             <div className='flex items-center'>
                                 <Button variant='outline' className='size-8' disabled={item.count <= 1} onClick={() => handleUpdateQty(item.id, item.count - 1)}>
                                     <Minus size={14} />
@@ -80,6 +85,11 @@ const CartItems = ({ cart }: CartItemsProps) => {
                                     <Plus size={14} />
                                 </Button>
                             </div>
+
+                            <Button variant='ghost' size='icon' className='text-destructive/90 hover:text-destructive' onClick={() => handleRemoveItem(item.id)}>
+                                <Trash2 size={18} />
+                            </Button>
+
                         </div>
 
                     </div>
