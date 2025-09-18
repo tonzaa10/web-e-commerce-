@@ -7,21 +7,17 @@ import { CartType } from '@/types/cart'
 import { Minus, Plus, Trash2 } from 'lucide-react';
 import Image from 'next/image'
 import Link from 'next/link'
-
 import { removeFromCartAction, updateCartItemAction } from '../actions/cart';
 import { toast } from 'sonner';
+import { useTransition } from 'react';
 
 interface CartItemsProps {
-    cart: CartType | null;
-
+    cart: CartType;
 }
-
 
 const CartItems = ({ cart }: CartItemsProps) => {
 
-
-
-    if (!cart) return null
+    const [isPending, startTransition] =useTransition()
 
     const handleUpdateQty = async (itemId: string, newCount: number) => {
 
