@@ -5,16 +5,23 @@ import { DesktopNavLinks } from "./ืnavlinks";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import DesktopUserMenu from "./desktop-user-menu";
+import { getCartItemCount, getUserCart } from "@/features/carts/db/carts";
 
 interface NavbarProps {
   user: UserType | null;
 }
 
-const Navbar = ({ user }: NavbarProps) => {
+const Navbar = async ({ user }: NavbarProps) => {
+
+const itemCount = user ?  await getCartItemCount(user.id) : 0
+
+//const cart = user ? await getUserCart(user.id) : null;
+//const itemCount = cart ? cart.items.length : 0
+
   return (
     <nav className="flex items-center gap-3">
       {/* Mobile Navigation */}
-      {user && <CartIcon/>}
+      {user && <CartIcon itemCount={itemCount}/ >}
       <MobileMenu user={user} />
 
       {/* Desktop Navigation */}
