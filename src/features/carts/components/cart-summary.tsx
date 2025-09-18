@@ -8,17 +8,38 @@ import { ShoppingBag } from "lucide-react";
 import Link from "next/link";
 import { clearCartAction } from "../actions/cart";
 import { toast } from "sonner";
-import { useOptimistic } from "react";
+import { useOptimistic, useTransition } from "react";
 
 interface CartSummaryProps {
     cart: CartType;
 }
 
 const CartSummary = ({ cart }: CartSummaryProps) => {
+    
+    //eslint-disable-next-line
+    const [isPending, startTransition] = useTransition()
 
-   const [opCart] = useOptimistic(cart)
+    const [opCart, updateOpCart] = useOptimistic(
+        cart,
+        (state, action: 'clear') => {
+            if (action === 'clear') {
+                return {
+                    ...state,
+                    items: [],
+                    cartTotal: 0,
+                    itemCount: 0,
+                }
+            }
+            return state
+        }
+    )
 
-    const handdleClearCart = async () => {
+    const handleClearCart = async () => {
+
+        startTransition(() => {
+            updateOpCart('clear')
+        })
+
         const result = await clearCartAction()
 
         if (result.success) {
@@ -56,7 +77,7 @@ const CartSummary = ({ cart }: CartSummaryProps) => {
                         <span>เช็คเอาท์</span>
                     </Link>
                 </Button>
-                <Button variant='outline' className="w-full" disabled={opCart.items.length === 0} onClick={handdleClearCart}>
+                <Button variant='outline' className="w-full" disabled={opCart.items.length === 0} onClick={handleClearCart}>
                     ล้างตะกร้า
                 </Button>
 
