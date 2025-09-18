@@ -14,9 +14,10 @@ import { SignoutButton, UserAvatarSmall, UserDropdownAvatar } from "./user-comp"
 
 interface DesktopUserMenuProps {
   user: UserType;
+  itemCount: number;
 }
 
-const DesktopUserMenu = ({ user }: DesktopUserMenuProps) => {
+const DesktopUserMenu = ({ user, itemCount }: DesktopUserMenuProps) => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -38,7 +39,7 @@ const DesktopUserMenu = ({ user }: DesktopUserMenuProps) => {
         <DropdownMenuItem asChild className="cursor-pointer">
           <Link href="/cart">
             <span>ตะกร้าของฉัน</span>
-            <Badge className="ml-auto bg-primary/50">0</Badge>
+            <Badge className="ml-auto">{itemCount}</Badge>
           </Link>
         </DropdownMenuItem>
 

@@ -1,4 +1,5 @@
 import CartItems from '@/features/carts/components/cart-items'
+import CartSummary from '@/features/carts/components/cart-summary'
 import EmptyCart from '@/features/carts/components/empty-cart'
 import { getUserCart } from '@/features/carts/db/carts'
 import { headers } from 'next/headers'
@@ -23,7 +24,7 @@ const CartPage = async () => {
                     </div>
 
                     <div className='lg:col-span-1'>
-                        <div>Cart Summary</div>
+                        <CartSummary cart={cart}/>
                     </div>
 
                 </div >

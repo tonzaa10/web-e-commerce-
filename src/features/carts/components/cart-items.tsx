@@ -24,6 +24,7 @@ interface CartOptimistic {
 
 const CartItems = ({ cart }: CartItemsProps) => {
 
+    // eslint-disable-next-line
     const [isPending, startTransition] = useTransition()
 
     const [opCart, updateOpCart] = useOptimistic(
@@ -132,13 +133,13 @@ const CartItems = ({ cart }: CartItemsProps) => {
 
                         <div className='flex items-center justify-between mt-2'>
                             <div className='flex items-center'>
-                                <Button variant='outline' className='size-8' disabled={item.count <= 1} onClick={() => handleUpdateQty(item.id, item.count - 1)}>
+                                <Button variant='outline' className='size-8' disabled={item.count <= 1 } onClick={() => handleUpdateQty(item.id, item.count - 1)}>
                                     <Minus size={14} />
                                 </Button>
 
                                 <span className=' w-10 text-center '>{item.count}</span>
 
-                                <Button variant='outline' className='size-8' disabled={item.count >= item.product.stock} onClick={() => handleUpdateQty(item.id, item.count + 1)}>
+                                <Button variant='outline' className='size-8' disabled={item.count >= item.product.stock } onClick={() => handleUpdateQty(item.id, item.count + 1)}>
                                     <Plus size={14} />
                                 </Button>
                             </div>
