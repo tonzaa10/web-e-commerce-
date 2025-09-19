@@ -43,6 +43,7 @@ export const config = {
         '/',
         '/auth/:path*', // Match all paths under /auth
         '/admin/:path*',
-        '/cart/:path*'
+        '/cart/:path*',
+        '/checkout/:path*'
     ]
 }
