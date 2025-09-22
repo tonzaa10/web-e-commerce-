@@ -13,7 +13,7 @@ export const getUserOrdersTag = (userId: string) => {
     return `user:${userId}:orders` as const;
 }
 
-export const revalidateOrderCache = (orderId:string, userId:string) =>{
+export const revalidateOrderCache = (orderId: string, userId: string) => {
     revalidateTag(getOrderGlobalTag());
     revalidateTag(getOrderIdTag(orderId))
     revalidateTag(getUserOrdersTag(userId))
