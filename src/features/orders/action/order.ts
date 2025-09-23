@@ -2,8 +2,12 @@
 
 import { redirect } from "next/navigation";
 import { createOrder } from "../db/order";
+import { InitialFormState } from "@/types/action";
 
-export const checkoutAction = async (formData: FormData) => {
+export const checkoutAction = async (
+  _prevState: InitialFormState,
+  formData: FormData,
+) => {
   const data = {
     address: formData.get("address") as string,
     phone: formData.get("phone") as string,
@@ -18,8 +22,8 @@ export const checkoutAction = async (formData: FormData) => {
       success: false,
       message: result.message,
       errors: result.error,
-    }
+    };
   }
 
-  redirect(`my-orders/&{result.orderId}`)
+  redirect(`/my-orders/${result.orderId}`);
 };

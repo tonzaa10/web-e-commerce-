@@ -1,3 +1,4 @@
+'use client'
 import InputForm from "@/components/shared/input-form"
 import SubmitBtn from "@/components/shared/submit-btn"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -8,6 +9,8 @@ import { UserType } from "@/types/user"
 import { ShoppingBag } from "lucide-react"
 import Form from "next/form"
 import { checkoutAction } from "../action/order"
+import { useForm } from "@/hooks/use-form"
+import ErrorMessage from "@/components/shared/error-message"
 
 interface CheckoutFormProps {
     user: UserType
@@ -15,6 +18,8 @@ interface CheckoutFormProps {
 const CheckoutForm = ({ user }: CheckoutFormProps) => {
 
     const hasUserData = !!(user.address && user.tel)
+
+    const { errors, formAction, isPending, clearErrors } = useForm(checkoutAction)
 
 
 
@@ -24,7 +29,7 @@ const CheckoutForm = ({ user }: CheckoutFormProps) => {
                 <CardTitle className="text-lg">ข้อมูลการจัดส่ง</CardTitle>
             </CardHeader>
 
-            <Form action={checkoutAction}>
+            <Form action={formAction} onChange={clearErrors}>
                 <CardContent className="flex flex-col gap-4">
                     {hasUserData && (
                         <div className="flex items-center space-x-2 mb-4 border p-3 rounded-md bg-muted/50">
@@ -48,6 +53,7 @@ const CheckoutForm = ({ user }: CheckoutFormProps) => {
                             defaultValue={user.tel || ''}
                             required
                         />
+                        {errors.phone && <ErrorMessage error={errors.phone[0]} />}
                     </div>
                     <div className="flex flex-col gap-2 ">
                         <Label htmlFor="address">
@@ -61,6 +67,7 @@ const CheckoutForm = ({ user }: CheckoutFormProps) => {
                             className="min-h-24"
                         />
                         {/* Error message */}
+                        {errors.address && <ErrorMessage error={errors.address[0]} />}
                     </div>
                     <div className="flex flex-col gap-2">
                         <Label htmlFor="note">หมายเหตุเพิ่มเติม</Label>
@@ -71,12 +78,14 @@ const CheckoutForm = ({ user }: CheckoutFormProps) => {
                             className="min-h-20"
                         />
                         {/* Error message */}
+                        {errors.note && <ErrorMessage error={errors.note[0]} />}
                     </div>
                     <div className="pt-4">
                         <SubmitBtn
                             name="ดำเนินการสั่งซื้อ"
                             icon={ShoppingBag}
                             className="w-full"
+                            pending={isPending}
                         />
                     </div>
                 </CardContent>

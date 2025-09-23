@@ -3,7 +3,7 @@ import { Separator } from "@/components/ui/separator";
 import { formatPrice } from "@/lib/formatPrice";
 import { CartType } from "@/types/cart";
 import Image from "next/image";
-import { format } from "path";
+
 
 interface CheckoutSummaryProps {
     cart: CartType;
