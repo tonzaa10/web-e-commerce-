@@ -133,7 +133,7 @@ model Order {
   address        String?
   phone          String?
   note           String?
-  shppingFee     Float       @default(0)
+  shippingFee     Float       @default(0)
   trackingNumber String?
   createdAt      DateTime    @default(now())
   updatedAt      DateTime
