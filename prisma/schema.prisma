@@ -133,14 +133,14 @@ model Order {
   address        String?
   phone          String?
   note           String?
-  shippingFee     Float       @default(0)
+  shippingFee    Float       @default(0)
   trackingNumber String?
   createdAt      DateTime    @default(now())
   updatedAt      DateTime
 
   customerId String
   customer   User        @relation(fields: [customerId], references: [id])
-  item       OrderItem[]
+  items   OrderItem[]
 }
 
 model OrderItem {
