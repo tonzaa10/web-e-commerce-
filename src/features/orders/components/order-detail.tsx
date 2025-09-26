@@ -1,0 +1,152 @@
+'use client';
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { formatPrice } from "@/lib/formatPrice";
+import { getStatusColor, getStatusText } from "@/lib/utils";
+import { OrderType } from "@/types/order";
+import { CreditCard } from "lucide-react";
+import Image from "next/image";
+import { useState } from "react";
+
+interface OrderDetailProps {
+  order: OrderType;
+}
+
+const OrderDetail = ({ order }: OrderDetailProps) => {
+
+  const [qrCodeURL, setQrCodeURL] = useState(null)
+  const [isGeneratingQR, setGeneratingQR] = useState(false)
+
+  return (
+    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="lg:col-span-2">
+        <Card>
+          <CardHeader className="border-b">
+            <CardTitle>
+              หมายเลขคำสั่งซื้อ: {order.orderNumber}
+            </CardTitle>
+            <Badge className={getStatusColor(order.status)}>{getStatusText(order.status)}</Badge>
+          </CardHeader>
+          <CardContent className="p-3">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>สินค้า</TableHead>
+                  <TableHead className="text-right">ราคาต่อชิ้น</TableHead>
+                  <TableHead className="text-center">จำนวน</TableHead>
+                  <TableHead className="text-right">ราคารวม</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {order.items.map((item, index) => (
+                  <TableRow key={index}>
+                    <TableCell>
+                      <div className="flex items-center gap-2">
+                        <div className="relative size-10 border rounded-md overflow-hidden">
+                          <Image
+                            alt={item.productTitle}
+                            src={item.productImage || '/images/no-product-image.png'}
+                            fill
+                            className="object-cover"
+                          />
+                        </div>
+                        <span className="font-medium">{item.productTitle}</span>
+                      </div>
+                    </TableCell>
+                    <TableCell className="text-right">{formatPrice(item.price)} </TableCell>
+                    <TableCell className="text-center">{item.quantity}</TableCell>
+                    <TableCell className="text-right">{formatPrice(item.totalPrice)}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </CardContent>
+        </Card>
+        <Card className="mt-6">
+          <CardHeader >
+            <CardTitle>ข้อมูลการจัดส่ง</CardTitle>
+          </CardHeader>
+          <CardContent className="flex flex-col gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <h3 className="font-medium mb-1">ที่อยู่จัดส่ง :</h3>
+                <p className="text-muted-foreground">{order.address || '-'}</p>
+              </div>
+              <div>
+                <h3 className="font-medium mb-1">เบอร์โทรศัพท์ :</h3>
+                <p className="text-muted-foreground">{order.phone || '-'}</p>
+              </div>
+              <div>
+                <h3 className="font-medium mb-1">หมายเหตุ :</h3>
+                {order.note && (
+                  <p className="text-muted-foreground">{order.note}</p>
+                )}
+              </div>
+              <div>
+                <h3 className="font-medium mb-1">หมายเลขพัสดุ :</h3>
+                {order.note && (
+                  <p className="font-medium text-primary">{order.note}</p>
+                )}
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      <div>
+        <Card>
+          <CardHeader>
+            <CardTitle className="">สรุปคำสั่งซื้อ</CardTitle>
+          </CardHeader>
+          <CardContent className="flex flex-col gap-4">
+            <div className="flex flex-col gap-2">
+              <div className="flex justify-between">
+                <span className="text-muted-foreground">ยอดสินค้า :</span>
+                <span>{formatPrice(order.totalAmount - order.shippingFee)}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-muted-foreground">ค่าจัดส่ง :</span>
+                <span>{formatPrice(order.shippingFee)}</span>
+              </div>
+              <Separator />
+              <div className="flex justify-between font-bold">
+                <span>ยอดรวมทั้งสิิ้น :</span>
+                <span>{formatPrice(order.totalAmount)}</span>
+              </div>
+            </div>
+
+            {order.status === 'Pending' && (
+              <div className="flex flex-col gap-3 pt-2">
+                <div className="flex flex-col gap-2">
+                  {qrCodeURL ? (
+                    <div className="rounded-md border p-4 flex flex-col items-center">
+                      <h3 className="text-center font-medium mb-3">สแกน QR Code เพื่อชำระเงิน</h3>
+                      <div className="mb-3">
+                        <Image
+                          alt="PromptPay QR Code"
+                          src={qrCodeURL}
+                          width={200}
+                          height={200}
+                        />
+                      </div>
+                    </div>
+                  ) : (
+                    <Button>
+                      <CreditCard />
+                      <span>{isGeneratingQR ? 'กำลังสร้าง QR Code...' : 'ชำระเงินด้วย PromptPay'}</span>
+                    </Button>
+                  )}
+                </div>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  );
+};
+
+export default OrderDetail;

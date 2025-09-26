@@ -10,7 +10,7 @@ import {
   unstable_cacheLife as cacheLife,
   unstable_cacheTag as cacheTag,
 } from "next/cache";
-import formatData from "@/lib/formatDate";
+import formatDate from "@/lib/formatDate";
 
 interface CheckoutInput {
   address: string;
@@ -153,9 +153,11 @@ export const createOrder = async (input: CheckoutInput) => {
 
 export const getOrderById = async (userId: string, orderId: string) => {
   "use cache";
+
   if (!userId) {
     redirect("/auth/signin");
   }
+
   cacheLife("minutes");
   cacheTag(getOrderIdTag(orderId));
 
@@ -189,7 +191,8 @@ export const getOrderById = async (userId: string, orderId: string) => {
         product: {
           ...item.product,
           mainImage,
-          lowStock: item.product.id.substring(0, 8).toUpperCase()
+          lowStock: 5,
+          sku: item.product.id.substring(0, 8).toUpperCase()
         }
       }
     })
@@ -197,11 +200,12 @@ export const getOrderById = async (userId: string, orderId: string) => {
     return {
       ...order,
       items,
-      createAtFormatted: formatData(order.createdAt),
-      paymentAtFormatted: order.paymentAt ? formatData(order.paymentAt) : null,
+        createdAtFormatted: formatDate(order.createdAt),
+      paymentAtFormatted: order.paymentAt ? formatDate(order.paymentAt) : null,
     }
 
   } catch (error) {
     console.error(`Error getting order ${orderId}`, error);
+    return null;
   }
 };

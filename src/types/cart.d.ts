@@ -5,7 +5,7 @@ export interface CartItem {
     id: string;
     count: number;
     price: number;
-    product: ProductType
+    product: ProductType;
 }
 
 export interface CartType extends Cart {

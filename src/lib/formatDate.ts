@@ -1,13 +1,11 @@
 import dayjs from "@/lib/dayjs";
 
-const formatData = (date:Date | null | undefined) => {
-    if(!date) {
-        return '-'
-    }
-    return dayjs(date).format('DD/MM/YYYY HH:mm:ss');
-    
-}
+const formatDate = (date: Date | null | undefined) => {
+  if (!date) {
+    return "-";
+  }
 
-export default formatData;
+  return dayjs(date).format("DD/MM/YYYY HH:mm");
+};
 
-
+export default formatDate;

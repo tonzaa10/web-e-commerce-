@@ -3,8 +3,11 @@ import { ProductType } from "./product";
 import { UserType } from "./user";
 
 export interface OrderType extends Order {
-    item: OrderItem & {
-        product: ProductType
-    }
-    customer: UserType
+  items: (OrderItem & {
+    product: ProductType;
+  })[];
+  customer: UserType;
+  createdAtFormatted: string;
+  paymentAtFormatted?: string | null;
+  totalItems?: number;
 }

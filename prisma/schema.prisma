@@ -37,7 +37,7 @@ enum ProductStatus {
 enum OrderStatus {
   Pending
   Paid
-  Sipped
+  Shipped
   Delivered
   Cancelled
 }
