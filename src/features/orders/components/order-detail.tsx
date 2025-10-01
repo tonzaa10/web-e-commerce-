@@ -5,11 +5,14 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { formatPrice } from "@/lib/formatPrice";
+import { generatePromptPayQR } from "@/lib/generatePromptPayQR";
 import { getStatusColor, getStatusText } from "@/lib/utils";
 import { OrderType } from "@/types/order";
-import { CreditCard } from "lucide-react";
+import { CreditCard, Upload } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
+import { toast } from "sonner";
+import { fa } from "zod/v4/locales";
 
 interface OrderDetailProps {
   order: OrderType;
@@ -17,8 +20,26 @@ interface OrderDetailProps {
 
 const OrderDetail = ({ order }: OrderDetailProps) => {
 
-  const [qrCodeURL, setQrCodeURL] = useState(null)
-  const [isGeneratingQR, setGeneratingQR] = useState(false)
+  const [qrCodeURL, setQrCodeURL] = useState<string | null>(null)
+  const [isGeneratingQR, setIsGeneratingQR] = useState(false)
+
+  const [isPaymentFormModal, setIsPaymentFormModal] = useState(false)
+
+  const handleGenerateQR = async () => {
+    try {
+      setIsGeneratingQR(true)
+
+      const qrCode = generatePromptPayQR(order.totalAmount)
+      setQrCodeURL(qrCode)
+
+
+    } catch (error) {
+      console.error(error)
+      toast.error('เกิดข้อผิดพลาดในการสร้าง QR Code')
+    } finally {
+      setIsGeneratingQR(false)
+    }
+  }
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -134,14 +155,23 @@ const OrderDetail = ({ order }: OrderDetailProps) => {
                       </div>
                     </div>
                   ) : (
-                    <Button>
+                    <Button onClick={handleGenerateQR} disabled={isGeneratingQR}>
                       <CreditCard />
                       <span>{isGeneratingQR ? 'กำลังสร้าง QR Code...' : 'ชำระเงินด้วย PromptPay'}</span>
                     </Button>
                   )}
+
+                  <Button
+                    variant='outline'
+                    onClick={() => setIsPaymentFormModal(true)}
+                  >
+                    <Upload size={16} />
+                    <span>อัพโหลดหลักฐานการชำระเงิน</span>
+                  </Button>
                 </div>
               </div>
             )}
+
           </CardContent>
         </Card>
       </div>

@@ -1,5 +1,4 @@
 import type { NextConfig } from "next";
-import { fa } from "zod/v4/locales";
 
 const nextConfig: NextConfig = {
   /* config options here */
@@ -15,6 +14,10 @@ const nextConfig: NextConfig = {
       {
         protocol: 'https',
         hostname: 'ik.imagekit.io'
+      },
+       {
+        protocol: 'https',
+        hostname: 'promptpay.io'
       }
     ]
   }
