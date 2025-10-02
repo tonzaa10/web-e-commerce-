@@ -1,7 +1,7 @@
 "use server";
 
 import { redirect } from "next/navigation";
-import { createOrder } from "../db/order";
+import { createOrder, uploadPaymentSlip } from "../db/order";
 import { InitialFormState } from "@/types/action";
 
 export const checkoutAction = async (
@@ -27,3 +27,11 @@ export const checkoutAction = async (
 
   redirect(`/my-orders/${result.orderId}`);
 };
+
+export const updatePaymentAction = async (//_prevState: InitialFormState,
+ formData:FormData) => {
+const orderId = formData.get('order-id') as string;
+const paymentImage = formData.get('payment-image') as File
+
+await uploadPaymentSlip(orderId, paymentImage)
+}

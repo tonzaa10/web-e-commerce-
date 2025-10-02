@@ -200,7 +200,7 @@ export const getOrderById = async (userId: string, orderId: string) => {
     return {
       ...order,
       items,
-        createdAtFormatted: formatDate(order.createdAt),
+      createdAtFormatted: formatDate(order.createdAt),
       paymentAtFormatted: order.paymentAt ? formatDate(order.paymentAt) : null,
     }
 
@@ -209,3 +209,20 @@ export const getOrderById = async (userId: string, orderId: string) => {
     return null;
   }
 };
+
+export const uploadPaymentSlip = async (orderId: string, file: File) => {
+  const user = await authCheck()
+  if (!user) {
+    redirect('/auth/signin')
+  }
+
+  try {
+
+  } catch (error) {
+    console.error('Error uploading payment slip:', error);
+    return {
+      message: 'เกิดข้อผิดพลาในการอัพโฟลดสลิปการชำระเงิน'
+    }
+  }
+}
+

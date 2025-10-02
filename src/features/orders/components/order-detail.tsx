@@ -12,7 +12,7 @@ import { CreditCard, Upload } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
 import { toast } from "sonner";
-import { fa } from "zod/v4/locales";
+import PaymentFormModal from "./payment-form-modal";
 
 interface OrderDetailProps {
   order: OrderType;
@@ -169,6 +169,11 @@ const OrderDetail = ({ order }: OrderDetailProps) => {
                     <span>อัพโหลดหลักฐานการชำระเงิน</span>
                   </Button>
                 </div>
+                <PaymentFormModal
+                  open={isPaymentFormModal}
+                  onOpnenChange={setIsPaymentFormModal}
+                  orderId={order.id}
+                />
               </div>
             )}
 
