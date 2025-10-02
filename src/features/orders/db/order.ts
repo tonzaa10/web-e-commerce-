@@ -1,6 +1,6 @@
 import { authCheck } from "@/features/auths/db/auths";
 import { redirect } from "next/navigation";
-import { canCreateOrder } from "../permissions/orders";
+import { canCancelOrder, canCreateOrder } from "../permissions/orders";
 import { checkoutSchema } from "../schemas/orders";
 import { db } from "@/lib/db";
 import { generateOrderNumber } from "@/lib/generateOrderNumber";
@@ -11,6 +11,7 @@ import {
   unstable_cacheTag as cacheTag,
 } from "next/cache";
 import formatDate from "@/lib/formatDate";
+import { uploadToImageKit } from "@/lib/imageKit";
 
 interface CheckoutInput {
   address: string;
@@ -18,6 +19,8 @@ interface CheckoutInput {
   note?: string;
   useProfileData?: string;
 }
+
+
 
 export const createOrder = async (input: CheckoutInput) => {
   const user = await authCheck();
@@ -217,6 +220,46 @@ export const uploadPaymentSlip = async (orderId: string, file: File) => {
   }
 
   try {
+    const order = await db.order.findUnique({
+      where: { id: orderId }
+    })
+
+    if (!order) {
+      return {
+        message: 'ไม่พบคำสั่งซื้อ'
+      }
+    }
+
+    if (order.customerId !== user.id) {
+      return {
+        message: 'คุณไม่มีสิทธิ์ในคำสั่งซื้อนี้'
+      }
+    }
+
+    if (order.status !== "Pending") {
+      return {
+        message: 'ไม่สามารถอัพโหลดหลักฐานการชำระเงินได้ คำสั่งซื้อได้ชำระเงินแล้ว'
+      }
+    }
+
+    const uploadResult = await uploadToImageKit(file, 'payment')
+
+    if (!uploadResult || uploadResult.message) {
+      return {
+        message: uploadResult.message || 'อัพโหลดรูปภาพไม่สำเร็จ'
+      }
+    }
+
+    const updatedOrder = await db.order.update({
+      where: { id: orderId },
+      data: {
+        paymentImage: uploadResult.url,
+        status: 'Paid',
+        paymentAt: new Date(),
+      }
+    })
+
+    revalidateOrderCache(updatedOrder.id, updatedOrder.customerId)
 
   } catch (error) {
     console.error('Error uploading payment slip:', error);
@@ -224,5 +267,67 @@ export const uploadPaymentSlip = async (orderId: string, file: File) => {
       message: 'เกิดข้อผิดพลาในการอัพโฟลดสลิปการชำระเงิน'
     }
   }
+}
+
+export const cancelOrderStatus = async (orderId: string) => {
+  const user = await authCheck()
+  if (!user || !canCancelOrder(user)) {
+    redirect('/auth/signin')
+  }
+
+  try {
+    const order = await db.order.findUnique({
+      where: { id: orderId },
+      include: {
+        items: true
+      }
+    })
+
+    if (!order) {
+      return {
+        message: 'ไม่มีคำสั่งซื้อ'
+      }
+    }
+
+    if (order.customerId !== user.id) {
+      return {
+        message: 'คุณไม่มีสิทธิ์ในคำสั่งซื้อนี้'
+      }
+    }
+
+    if (order.status !== 'Pending') {
+      return {
+        message: 'ไม่สามารถยกเลิกคำสั่งซื้อได้ เนื่องจากคำสั่งซื้อนได้ชำระเงินแล้ว กรุณาติดต่อเราเพื่อสอบถามเพิ่มเติม'
+      }
+    }
+
+    await db.$transaction(async (prisma) => {
+      for (const item of order.items) {
+        await prisma.product.update({
+          where: { id: item.productId },
+          data: {
+            stock: { increment: item.quantity },
+            sold: { decrement: item.quantity }
+          }
+        })
+      }
+
+      await prisma.order.update({
+        where: { id: orderId },
+        data: {
+          status: "Cancelled"
+        }
+      })
+    })
+
+    revalidateOrderCache(orderId, user.id)
+
+  } catch (error) {
+    console.error('Error canclelling order:', error);
+    return {
+      message: 'เกิดข้อผิดพลาดในการยกเลิกคำสั่งซื้อ'
+    }
+  }
+
 }
 

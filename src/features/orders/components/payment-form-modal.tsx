@@ -9,20 +9,21 @@ import Image from "next/image";
 import { useState } from "react";
 import { toast } from "sonner";
 import { updatePaymentAction } from "../action/order";
+import { useForm } from "@/hooks/use-form";
 
 interface PaymentFormModalProps {
   open: boolean;
-  onOpnenChange: (open: boolean) => void;
+  onOpenChange: (open: boolean) => void;
   orderId: string;
 }
 const PaymentFormModal = ({
   open,
-  onOpnenChange,
+  onOpenChange,
   orderId,
 }: PaymentFormModalProps) => {
   const [preview, setPreview] = useState<string | null>(null);
 
-  console.log(preview);
+  const { formAction, isPending } = useForm(updatePaymentAction)
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -37,14 +38,16 @@ const PaymentFormModal = ({
     const url = URL.createObjectURL(file);
     setPreview(url);
   };
+
+
   return (
     <Modal
       open={open}
-      onOpenChange={onOpnenChange}
+      onOpenChange={onOpenChange}
       title="อัพโหลดหลักฐานการชำระเงิน"
       description=""
     >
-      <Form action={updatePaymentAction}>
+      <Form action={formAction}>
         <input type="hidden" name="order-id" value={orderId} />
         <div className="flex flex-col gap-4">
           <div className="flex flex-col gap-2">
@@ -76,14 +79,16 @@ const PaymentFormModal = ({
               type="button"
               onClick={() => {
                 setPreview(null);
-                onOpnenChange(false)
-              }}>
+                onOpenChange(false)
+              }}
+              disabled={isPending}
+            >
               ยกเลิก
             </Button>
 
-            <Button type="submit" disabled={!preview}>
+            <Button type="submit" disabled={!preview || isPending}>
               <Upload size={16} />
-              <span>อัพโหลด</span>
+              <span>{isPending ? 'กำลังอัพโหลด...' : 'อัพโหลด'}</span>
             </Button>
 
           </div>

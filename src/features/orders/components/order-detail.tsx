@@ -8,11 +8,12 @@ import { formatPrice } from "@/lib/formatPrice";
 import { generatePromptPayQR } from "@/lib/generatePromptPayQR";
 import { getStatusColor, getStatusText } from "@/lib/utils";
 import { OrderType } from "@/types/order";
-import { CreditCard, Upload } from "lucide-react";
+import { Ban, CreditCard, Upload } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
 import { toast } from "sonner";
 import PaymentFormModal from "./payment-form-modal";
+import CancelOrderModal from "./cancel-order-modal";
 
 interface OrderDetailProps {
   order: OrderType;
@@ -23,7 +24,9 @@ const OrderDetail = ({ order }: OrderDetailProps) => {
   const [qrCodeURL, setQrCodeURL] = useState<string | null>(null)
   const [isGeneratingQR, setIsGeneratingQR] = useState(false)
 
+
   const [isPaymentFormModal, setIsPaymentFormModal] = useState(false)
+  const [isCancelModal, setIsCancelModal] = useState(false);
 
   const handleGenerateQR = async () => {
     try {
@@ -108,8 +111,8 @@ const OrderDetail = ({ order }: OrderDetailProps) => {
               </div>
               <div>
                 <h3 className="font-medium mb-1">หมายเลขพัสดุ :</h3>
-                {order.note && (
-                  <p className="font-medium text-primary">{order.note}</p>
+                {order.trackingNumber && (
+                  <p className="font-medium text-primary">{order.trackingNumber}</p>
                 )}
               </div>
             </div>
@@ -168,12 +171,29 @@ const OrderDetail = ({ order }: OrderDetailProps) => {
                     <Upload size={16} />
                     <span>อัพโหลดหลักฐานการชำระเงิน</span>
                   </Button>
+
+                  <Button
+                    variant='destructive'
+                    onClick={() => setIsCancelModal(true)}
+                  >
+                    <Ban size={16}/>
+                    <span>ยกเลิกคำสั่งซื้อ</span>
+                  </Button>
+
                 </div>
                 <PaymentFormModal
                   open={isPaymentFormModal}
-                  onOpnenChange={setIsPaymentFormModal}
+                  onOpenChange={setIsPaymentFormModal}
                   orderId={order.id}
                 />
+
+                 <CancelOrderModal
+                  open={isCancelModal}
+                  onOpenChange={setIsCancelModal}
+                  orderId={order.id}
+                />
+
+
               </div>
             )}
 
