@@ -1,7 +1,8 @@
 import { Badge } from "@/components/ui/badge";
-import { Card, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { authCheck } from "@/features/auths/db/auths";
+import AdminOrderList from "@/features/orders/components/admin-order-list";
 import { getAllOrders } from "@/features/orders/db/order";
 import { OrderStatus } from "@prisma/client";
 import Link from "next/link";
@@ -72,7 +73,7 @@ const AdminOrderPage = async ({ searchParams }: AdminOrderPageProps) => {
         <CardHeader>
           <CardTitle className="text-lg sm:text-xl">Orders</CardTitle>
 
-          <Tabs defaultValue={"all"}>
+          <Tabs defaultValue={ status || "all"}>
             <TabsList className="gird grid-cols-6">
               <TabsTrigger value="all" asChild>
                 <Link href="/admin/orders">All</Link>
@@ -95,6 +96,9 @@ const AdminOrderPage = async ({ searchParams }: AdminOrderPageProps) => {
             </TabsList>
           </Tabs>
         </CardHeader>
+        <CardContent>
+          <AdminOrderList orders={orders}/>
+        </CardContent>
       </Card>
     </div>
   );

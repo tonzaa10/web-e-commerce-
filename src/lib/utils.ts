@@ -23,8 +23,6 @@ export const getStatusText = (status: OrderStatus): string => {
   }
 };
 
-
-
 export const getStatusColor = (status: OrderStatus): string => {
   switch (status) {
     case "Pending":
