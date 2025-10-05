@@ -55,7 +55,7 @@ const AdminOrderList = ({ orders }: AadminOrderListProps) => {
               </TableCell>
               <TableCell className="text-right">
                 <Button size="sm" variant="outline" asChild>
-                  <Link href={`/admin/ordr/${order.id}`}>
+                  <Link href={`/admin/orders/${order.id}`}>
                   <Eye size={14}/>
                   <span>View</span>
                   </Link>
