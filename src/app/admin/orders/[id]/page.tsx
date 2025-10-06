@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { authCheck } from "@/features/auths/db/auths"
+import AdminOrderDetail from "@/features/orders/components/admin-order-detail";
 import { getOrderById } from "@/features/orders/db/order";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
@@ -40,6 +41,7 @@ const AdminOrderDetailPage = async ({ params }: AdminOrderDetailPageProps) => {
                     </Link>
                 </Button>
             </div>
+            <AdminOrderDetail order={order}/>
         </div>
     )
 }
