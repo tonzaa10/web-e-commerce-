@@ -427,7 +427,7 @@ export const updateOrderStatus = async (input: UpdateOrderStatus) => {
   } catch (error) {
     console.error('Error updateing order satus:', error)
     return {
-      message: 'เกิดข้อผิดพลาดในการอัพเดทสถานะคำสั่งซื้อ'
+      message: 'เกิดข้อผิดพลาดในการอัพเดดสถานะคำสั่งซื้อ'
     }
   }
 }

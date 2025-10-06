@@ -261,7 +261,7 @@ export const updateCartItem = async (input: UpdateCartInput) => {
     } catch (error) {
         console.error('Error updating cart :', error)
         return {
-            message: 'เกิดข้อผิดพลาดในการอัพเดทสินค้า'
+            message: 'เกิดข้อผิดพลาดในการอัพเดดสินค้า'
         }
 
     }

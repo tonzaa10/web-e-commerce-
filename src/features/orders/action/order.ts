@@ -1,12 +1,18 @@
 "use server";
 
 import { redirect } from "next/navigation";
-import { cancelOrderStatus, createOrder, updateOrderStatus, uploadPaymentSlip } from "../db/order";
+import {
+  cancelOrderStatus,
+  createOrder,
+  updateOrderStatus,
+  uploadPaymentSlip,
+} from "../db/order";
 import { InitialFormState } from "@/types/action";
+
 
 export const checkoutAction = async (
   _prevState: InitialFormState,
-  formData: FormData,
+  formData: FormData
 ) => {
   const data = {
     address: formData.get("address") as string,
@@ -30,7 +36,7 @@ export const checkoutAction = async (
 
 export const updatePaymentAction = async (
   _prevState: InitialFormState,
-  formData: FormData,
+  formData: FormData
 ) => {
   const orderId = formData.get("order-id") as string;
   const paymentImage = formData.get("payment-image") as File;
@@ -39,37 +45,49 @@ export const updatePaymentAction = async (
 
   return result && result.message
     ? {
-      success: false,
-      message: result.message,
-    } : {
-      success: true,
-      message: 'อัพโหลดหลักฐานการชำระเงินสำเร็จ',
-    };
+        success: false,
+        message: result.message,
+      }
+    : {
+        success: true,
+        message: "อัพโหลดหลักฐานการชำระเงินสำเร็จ",
+      };
 };
 
 export const cancelOrderStatusAction = async (
   _prevState: InitialFormState,
   formData: FormData
 ) => {
-  const orderId = formData.get('order-id') as string;
+  const orderId = formData.get("order-id") as string;
 
   const result = await cancelOrderStatus(orderId);
 
   return result && result.message
     ? {
-      success: false,
-      message: result.message,
-    } : {
-      success: true,
-      message: 'ยกเลิกคำสั่งซื้อสำเร็จ',
-    };
-}
+        success: false,
+        message: result.message,
+      }
+    : {
+        success: true,
+        message: "ยกเลิกคำสั่งซื้อสำเร็จ",
+      };
+};
 
 export const updateOrderStatusAction = async (formData: FormData) => {
   const data = {
-    orderId: formData.get('order-id') as string,
-    status: formData.get('status') as string,
-    trackingNumber: formData.get('tracking-number') as string
-  }
-  await updateOrderStatus(data)
-}
+    orderId: formData.get("order-id") as string,
+    status: formData.get("status") as string,
+    trackingNumber: formData.get("tracking-number") as string,
+  };
+  const result = await updateOrderStatus(data);
+
+  return result && result.message
+    ? {
+        success: false,
+        message: result.message,
+      }
+    : {
+        success: true,
+        message: "อัพเดดสถานะคำสั่งซื้อสำเร็จ",
+      };
+};

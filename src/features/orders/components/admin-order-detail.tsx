@@ -16,6 +16,8 @@ import { Ban, Check, Truck } from "lucide-react";
 import Image from "next/image";
 import { useState, useTransition } from "react";
 import { updateOrderStatusAction } from "../action/order";
+import { toast } from "sonner";
+
 
 interface AdminOrderDetailProps {
     order: OrderType;
@@ -36,7 +38,12 @@ const AdminOrderDetail = ({ order }: AdminOrderDetailProps) => {
             if (trackingNumber) {
                 formData.append('tracking-number', trackingNumber)
             }
-            await updateOrderStatusAction(formData)
+            const result = await updateOrderStatusAction(formData)
+            if (result.success) {
+                toast.success(result.message)
+            } else {
+                toast.error(result.message)
+            }
         })
     }
 
