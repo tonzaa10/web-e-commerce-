@@ -19,10 +19,10 @@ interface DailyDataRecord {
 
 
 export const getSalesData = async ({ from, to }: DateRangeParams) => {
-    // const user = await authCheck();
-    // if (!user || user.role !== 'Admin') {
-    //     redirect('/')
-    // }
+    const user = await authCheck();
+    if (!user || user.role !== 'Admin') {
+        redirect('/')
+    }
 
     try {
         const startDate = dayjs(from).startOf("day").format();
