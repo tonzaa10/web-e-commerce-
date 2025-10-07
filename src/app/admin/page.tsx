@@ -1,4 +1,5 @@
 import DashboardContent from '@/features/dashboard/components/dashboard-content'
+import DateRangePicker from '@/features/dashboard/components/date-range-picker';
 import { getSalesData } from '@/features/dashboard/db/dashboard';
 import dayjs from '@/lib/dayjs'
 import React from 'react'
@@ -24,6 +25,9 @@ const saleData = await getSalesData({
         <h1 className="text-2xl sm:text-3xl font-bold">Dashboard</h1>
         <p  className="text-muted-foreground text-sm">Your store analytics and sales summary</p>
       </div>
+
+      <DateRangePicker start={startDate} end={endDate} />
+
       <DashboardContent data={saleData}/>
     </div>
   )
