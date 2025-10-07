@@ -13,11 +13,6 @@ const DateRangePicker = ({ start, end }: DateRangePickerProps) => {
 const searchParams = useSearchParams();
 const router = useRouter();
 
-
-
-  const startDate = searchParams.get("start") || start;
-  const endDate = searchParams.get("end") || end;
-
   const handleDateChange = (type: "start" | "end", value:string) => {
     const newParams = new URLSearchParams(searchParams)
     newParams.set(type, value)
@@ -32,8 +27,8 @@ const router = useRouter();
           <Label>Start</Label>
           <Input
             type="date"
-            defaultValue={startDate}
-            max={endDate}
+            defaultValue={start}
+            max={end}
             onChange={(event) => handleDateChange("start", event.target.value)}
           />
         </div>
@@ -41,8 +36,8 @@ const router = useRouter();
           <Label>End</Label>
           <Input
             type="date"
-            defaultValue={endDate}
-            min={startDate}
+            defaultValue={end}
+            min={start}
             onChange={(event) => handleDateChange("end", event.target.value)}
           />
         </div>

@@ -2,12 +2,21 @@ import DashboardContent from '@/features/dashboard/components/dashboard-content'
 import DateRangePicker from '@/features/dashboard/components/date-range-picker';
 import { getSalesData } from '@/features/dashboard/db/dashboard';
 import dayjs from '@/lib/dayjs'
-import React from 'react'
 
-const AdminPage = async () => {
 
-  const startDate = dayjs().subtract(1, "month").format("YYYY-MM-DD");
-  const endDate = dayjs().format("YYYY-MM-DD");
+interface AdminPageProps {
+  searchParams: Promise<{
+    start?: string;
+    end?: string;
+  }>;
+}
+
+const AdminPage = async ({searchParams}: AdminPageProps) => {
+
+  const {start, end} = await searchParams
+
+  const startDate = start || dayjs().subtract(1, "month").format("YYYY-MM-DD");
+  const endDate = end || dayjs().format("YYYY-MM-DD");
 
 
 const saleData = await getSalesData({
