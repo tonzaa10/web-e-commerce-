@@ -15,7 +15,6 @@ import { canCreateProduct, canUpdateProduct } from "../permissions/products";
 
 import { deleteFromImageKit } from "@/lib/imageKit";
 import { ProductStatus } from "@prisma/client";
-import { tr } from "zod/v4/locales";
 
 
 interface CreateProductInput {
@@ -30,42 +29,51 @@ interface CreateProductInput {
     images: Array<{ url: string; fileId: string }>;
 }
 
-export const getProducts = async () => {
+export const getProducts = async (page: number = 1, limit: number = 2) => {
     "use cache";
 
     cacheLife("hours");
     cacheTag(getProductGlobalTag());
 
+    const skip = (page - 1) * limit;
+
     try {
-        const products = await db.product.findMany({
-            orderBy: {
-                createdAt: 'desc'
-            },
-            include: {
-                category: {
-                    select: {
-                        id: true,
-                        name: true,
-                        status: true,
-                    },
+        const [products, totalCount] = await Promise.all([
+            db.product.findMany({
+                skip,
+                take: limit,
+                orderBy: {
+                    createdAt: "desc",
                 },
-                images: true
-            },
-        });
+                include: {
+                    category: {
+                        select: {
+                            id: true,
+                            name: true,
+                            status: true,
+                        },
+                    },
+                    images: true,
+                },
+            }),
+            db.product.count(),
+        ]);
+        return {
+            products: products.map((product) => {
 
-        return products.map((product) => {
-
-            const mainImage = product.images.find((image) => image.isMain)
-            return {
-                ...product,
-                lowStock: 5,
-                sku: product.id.substring(0, 8).toUpperCase(),
-                mainImage
-            }
-        });
+                const mainImage = product.images.find((image) => image.isMain)
+                return {
+                    ...product,
+                    lowStock: 5,
+                    sku: product.id.substring(0, 8).toUpperCase(),
+                    mainImage
+                }
+            }),
+            totalCount
+        }
     } catch (error) {
         console.error("Error getting products:", error);
-        return [];
+        return { products: [], totalCount: 0 };
     }
 };
 
