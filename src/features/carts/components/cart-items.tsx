@@ -129,7 +129,7 @@ const CartItems = ({ cart }: CartItemsProps) => {
                         </div>
 
                         <div className='text-sm text-muted-foreground'>ประเภท: {item.product.category.name}</div>
-                        <div className='text-sm text-muted-foreground'>ราคาต่อหน่ยว: {formatPrice(item.product.price)} </div>
+                        <div className='text-sm text-muted-foreground'>ราคาต่อหน่วย: {formatPrice(item.product.price)} </div>
 
                         <div className='flex items-center justify-between mt-2'>
                             <div className='flex items-center'>

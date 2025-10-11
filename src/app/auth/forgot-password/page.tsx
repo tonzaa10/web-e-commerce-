@@ -1,9 +1,13 @@
-import React from 'react'
+import AuthHeader from '@/features/auths/components/auth-header'
+import ForgotPasswordFrom from '@/features/auths/components/forgot-password-from'
 
-const ForgotPasswrod = () => {
+
+const ForgotPasswrodPage = () => {
   return (
-    <div>ForgotPasswrod</div>
+   <AuthHeader type="forgot-password">
+    <ForgotPasswordFrom/>
+   </AuthHeader>
   )
 }
 
-export default ForgotPasswrod
+export default ForgotPasswrodPage
