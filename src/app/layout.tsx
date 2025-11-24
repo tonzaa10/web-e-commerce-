@@ -1,3 +1,4 @@
+/* @ts-ignore - side-effect global CSS import has no type declarations */
 import "./globals.css";
 
 import { Metadata } from "next";
@@ -7,11 +8,11 @@ import {Kanit} from 'next/font/google'
 
 export const metadata: Metadata = {
   title: {
-    default: "Web Store | E-Commerce Workshop",
+    default: "Web Store | E-Commerce Workshop !",
     template: "%s | E-Commerce Workshop",
   },
   description:
-    "ร้านค้าออนไลน์อันดับ 1 สำหรับสินค้าไอทีครบวงจร พร้อมบริการจัดส่งเร็วและราคาคุ้มค่า!",
+    "ร้านค้าออนไลน์อันดับ 1 สำหรับสินค้าไอทีครบวงจร พร้อมบริการจัดส่งเร็วและราคาคุ้มค่า!!",
 };
 
 const kanit = Kanit ({

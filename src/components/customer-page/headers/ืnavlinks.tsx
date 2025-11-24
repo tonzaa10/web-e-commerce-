@@ -25,7 +25,7 @@ export const MobileNavLinks = () => (
 )
 
 export const DesktopNavLinks = () => (
-    <div className="flex items-center gap-1">
+    <div className="flex items-center gap-1 justify-end">
         {NAV_LINKS.map((link, index)=> (
             <Button key={index} variant='ghost' size='sm' asChild>
                 <Link href={link.href}>{link.title}</Link>

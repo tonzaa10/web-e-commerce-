@@ -10,7 +10,7 @@ interface HeaderCustomerProps {
 const HeaderCustomer = ({user}: HeaderCustomerProps) => {
     return (
         <header className='fixed top-0 inset-x-0 z-40 bg-card border-b shadow-sm'>
-            <div className='max-w-7xl mx-auto px-4 xl:px-0 flex justify-between items-center h-16'>
+            <div className='container mx-auto px-4 xl:px-0 flex justify-between items-center h-16'>
                 {/* Icon */}
                 <Link href="/" className='flex items-center gap-2 text-primary'>
                     <ShoppingBag size={28} />
