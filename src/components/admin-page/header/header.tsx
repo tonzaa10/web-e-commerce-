@@ -54,7 +54,7 @@ const HeaderAdmin = ({ user }: HeaderAdminProps) => {
             <DropdownMenuLabel>My Account</DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem>
-              <Link href="/profile" className="w-full">Profile</Link>
+              <Link href="/admin/profile" className="w-full">Profile</Link>
             </DropdownMenuItem>
              <DropdownMenuSeparator />
              <DropdownMenuItem className="text-destructive hover:!text-destructive/70 cursor-pointer" onClick={handleSignout} disabled={isPending}>

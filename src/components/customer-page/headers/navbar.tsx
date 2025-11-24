@@ -1,7 +1,7 @@
 import { UserType } from "@/types/user";
 import MobileMenu from "./mobile-menu";
 import CartIcon from "./cart-icon";
-import { DesktopNavLinks } from "./ืnavlinks";
+import { DesktopNavLinks } from "./navlinks";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import DesktopUserMenu from "./desktop-user-menu";

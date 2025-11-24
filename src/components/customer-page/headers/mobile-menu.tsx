@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/sheet";
 import { UserType } from "@/types/user";
 import { AuthButtons, SignoutButton, UserAvatar } from "./user-comp";
-import { MobileNavLinks } from "./ืnavlinks";
+import { MobileNavLinks } from "./navlinks";
 import { Separator } from "@/components/ui/separator";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import Link from "next/link";
