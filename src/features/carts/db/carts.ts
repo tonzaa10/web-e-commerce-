@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 import {
-    unstable_cacheLife as cacheLife,
-    unstable_cacheTag as cacheTag,
+    cacheLife as cacheLife,
+    cacheTag as cacheTag,
 } from 'next/cache'
 import { getCartTag, revalidateCartCache } from "./cache";
 import { db } from "@/lib/db";

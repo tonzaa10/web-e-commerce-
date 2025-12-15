@@ -7,8 +7,8 @@ import { generateOrderNumber } from "@/lib/generateOrderNumber";
 import { clearCart } from "@/features/carts/db/carts";
 import { getOrderGlobalTag, getOrderIdTag, revalidateOrderCache } from "./cache";
 import {
-  unstable_cacheLife as cacheLife,
-  unstable_cacheTag as cacheTag,
+  cacheLife as cacheLife,
+  cacheTag as cacheTag,
 } from "next/cache";
 import formatDate from "@/lib/formatDate";
 import { uploadToImageKit } from "@/lib/imageKit";

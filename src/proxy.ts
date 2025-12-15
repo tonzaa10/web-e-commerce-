@@ -20,7 +20,7 @@ const decryptJwtToken = async (token: string): Promise<Payload | null> => {
 }
 
 
-export const middleware = async (req: NextRequest) => {
+export const proxy = async (req: NextRequest) => {
     const response = NextResponse.next()
     const token = req.cookies.get('token')?.value
     if (!token) return response
