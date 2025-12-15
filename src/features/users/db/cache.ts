@@ -10,6 +10,6 @@ export const getUserIdTag = (id: string) => {
 }
 
 export const revalidateUserCache = (id: string) => {
-  revalidateTag(getUserGlobalTag())
-  revalidateTag(getUserIdTag(id))
+  revalidateTag(getUserGlobalTag(),'page')
+  revalidateTag(getUserIdTag(id),'page')
 }

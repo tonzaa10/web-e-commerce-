@@ -14,7 +14,7 @@ export const getUserOrdersTag = (userId: string) => {
 }
 
 export const revalidateOrderCache = (orderId: string, userId: string) => {
-    revalidateTag(getOrderGlobalTag());
-    revalidateTag(getOrderIdTag(orderId))
-    revalidateTag(getUserOrdersTag(userId))
+    revalidateTag(getOrderGlobalTag(),'page');
+    revalidateTag(getOrderIdTag(orderId),'page')
+    revalidateTag(getUserOrdersTag(userId),'page')
 }

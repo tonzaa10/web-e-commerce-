@@ -10,6 +10,6 @@ export const getProductIdTag = (id: string) => {
 };
 
 export const revalidateProductCache = (id: string) => {
-  revalidateTag(getProductGlobalTag());
-  revalidateTag(getProductIdTag(id));
+  revalidateTag(getProductGlobalTag(),'page');
+  revalidateTag(getProductIdTag(id),'page');
 };

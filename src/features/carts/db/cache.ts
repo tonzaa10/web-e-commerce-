@@ -6,6 +6,6 @@ export const getCartTag = (userId: string) => {
 };
 
 export const revalidateCartCache = (userId: string) => {
-  revalidateTag(getCartTag(userId));
-  revalidateTag(getUserIdTag(userId))
+  revalidateTag(getCartTag(userId),'page');
+  revalidateTag(getUserIdTag(userId),'page')
 };
