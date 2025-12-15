@@ -53,7 +53,7 @@ const ProductList = ({ products, totalCount, page, limit, }: ProductListProps) =
     const searchParams = useSearchParams();
     const router = useRouter();
     const totalPage = Math.ceil(totalCount / limit)
-    console.log(totalPage)
+    //console.log(totalPage)
 
 
     //Tab
@@ -106,6 +106,7 @@ const ProductList = ({ products, totalCount, page, limit, }: ProductListProps) =
         setSelectedProduct(product)
         setIsDetailModal(true)
     }
+    
   const handlePageChange = (newPage: number) => {
     const newParams = new URLSearchParams(searchParams);
     newParams.set("page", newPage.toString());

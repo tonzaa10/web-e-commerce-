@@ -3,8 +3,7 @@ import { MapPinHouse } from "lucide-react";
 import { FooterNavLinks } from "../headers/navlinks";
 
 const Footer = () => {
-  const date = new Date();
-  const year = date.getFullYear();
+  
   return (
     <footer className=" border-t shadow-sm bg-gray-100/50">
       <div className="max-w-7xl mx-auto py-10 px-4  xl:px-0 flex justify-between items-top gap-10 flex-col md:flex-row">
@@ -38,7 +37,7 @@ const Footer = () => {
         </div>
       </div>
       <div className=" border-t py-4 bg-white">
-        <p className="p-0 text-center">© Copyright {year} Web Store</p>
+        <p className="p-0 text-center">© Copyright  Web Store</p>
       </div>
     </footer>
   );
