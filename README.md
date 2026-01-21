@@ -34,3 +34,14 @@
 
 ```bash
 git clone https://github.com/tonzaa10/web-e-commerce-.git
+
+
+├── public/           # รูปภาพ / ไฟล์สาธารณะ
+├── src/
+│   ├── app/          # ตัว Next.js App
+│   ├── components/   # คอมโพเนนต์ UI
+│   └── ...
+├── .gitignore
+├── package.json
+└── README.md
+
