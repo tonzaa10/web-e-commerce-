@@ -1,71 +1,111 @@
 # Web E-commerce 🛍️
 
-โปรเจกต์เว็บ E-commerce ที่สร้างด้วย **Next.js**, รองรับการแสดงสินค้า, ตะกร้าสินค้า, และพัฒนาฟีเจอร์ต่างๆ ของร้านค้าออนไลน์
+A sample **E-commerce web application** built with **Next.js**, designed to demonstrate core online-store features such as product listing and shopping cart functionality. This project can be extended to connect with a backend or API service.
 
-🔗 **Live Demo:** https://web-e-commerce-three.vercel.app/ :contentReference[oaicite:1]{index=1}
+🔗 **Live Demo:** https://web-e-commerce-three.vercel.app/  
+🔗 **Repository:** https://github.com/tonzaa10/web-e-commerce-
 
 ---
 
 ## 🚀 About The Project
 
-เว็บนี้เป็นตัวอย่างโปรเจกต์ร้านค้าออนไลน์ที่ใช้ **Next.js** เป็นเฟรมเวิร์กหลัก (TypeScript) เพื่อสร้าง storefront ที่ทันสมัย รองรับการนำไปต่อยอดทั้งระบบหน้าร้าน (Frontend) และระบบหลังบ้าน (Admin / API) ได้อย่างยืดหยุ่น
+This project is a frontend E-commerce website developed using **Next.js (TypeScript)**.  
+It focuses on clean code structure, reusability, and scalability, making it suitable for further development into a full-featured online store.
 
-**ตัวอย่างฟีเจอร์:**
-- แสดงรายการสินค้า
-- ระบบตะกร้าสินค้า
-- นำไปต่อยอด backend / API ได้ง่าย
-- รองรับการ deploy ผ่าน Vercel
+### Key Features
+- Product listing pages
+- Shopping cart functionality
+- Modular and reusable components
+- Easy to extend with backend services (API, CMS, payment system)
+- Ready for deployment on **Vercel**
 
 ---
 
 ## 🧠 Tech Stack
 
-โปรเจกต์นี้ใช้เทคโนโลยีหลักดังนี้:
-- **Next.js** – Framework สำหรับ React  
-- **TypeScript** – เสริมความปลอดภัยของโค้ด  
-- **CSS / Module Styles** – สำหรับจัดการสไตล์  
-- รองรับการ deploy บน **Vercel** :contentReference[oaicite:2]{index=2}
+- **Next.js** – React framework for production
+- **TypeScript** – Type-safe JavaScript
+- **React** – UI library
+- **CSS / CSS Modules** – Styling
+- **Vercel** – Deployment platform
 
 ---
 
 ## 📦 Installation
 
-1. Clone โปรเจกต์นี้
+1. Clone the repository
 
 ```bash
 git clone https://github.com/tonzaa10/web-e-commerce-.git
-
 ```
 
-2. เข้าไปในโฟลเดอร์โปรเจกต์
+2. Navigate to the project directory
 
 ```bash
 cd web-e-commerce-
 ```
 
-3. ติดตั้ง dependencies
+3. Install dependencies
+
 ```bash
 npm install
-```
-หรือ
-
-```bash 
-yarn install
+# or
+yarn
 ```
 
 ---
 
-## 📂 Project Structure (โครงสร้างไฟล์)
+## 💻 Usage
+
+Run the development server:
 
 ```bash
-├── public/           # รูปภาพ / ไฟล์สาธารณะ
-├── src/
-│   ├── app/          # ตัว Next.js App
-│   ├── components/   # คอมโพเนนต์ UI
-│   └── ...
-├── .gitignore
-├── package.json
-└── README.md
-
+npm run dev
+# or
+yarn dev
 ```
+
+Open your browser and go to:
+```bash
+http://localhost:3000
+```
+
+---
+
+## 📂 Project Structure
+
+```bash
+├── public/            # Static assets
+├── src/
+│   ├── app/           # Next.js app directory
+│   ├── components/    # Reusable UI components
+│   ├── styles/        # Global & module styles
+│   └── ...
+├── package.json
+├── .gitignore
+└── README.md
+```
+
+---
+
+## 📌 Contributing
+
+Contributions are welcome!
+  1. Fork the project
+  2. Create your feature branch (feature/your-feature-name)
+  3. Commit your changes
+  4.Open a Pull Request
+
+---
+
+## 📝 License
+
+This project is open-source and available under the MIT License.
+
+---
+
+## 👤 Author
+
+Wittaya Imlukin
+
 
