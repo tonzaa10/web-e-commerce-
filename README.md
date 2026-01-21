@@ -1,36 +1,36 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Web E-commerce 🛍️
 
-## Getting Started
+โปรเจกต์เว็บ E-commerce ที่สร้างด้วย **Next.js**, รองรับการแสดงสินค้า, ตะกร้าสินค้า, และพัฒนาฟีเจอร์ต่างๆ ของร้านค้าออนไลน์
 
-First, run the development server:
+🔗 **Live Demo:** https://web-e-commerce-three.vercel.app/ :contentReference[oaicite:1]{index=1}
+
+---
+
+## 🚀 About The Project
+
+เว็บนี้เป็นตัวอย่างโปรเจกต์ร้านค้าออนไลน์ที่ใช้ **Next.js** เป็นเฟรมเวิร์กหลัก (TypeScript) เพื่อสร้าง storefront ที่ทันสมัย รองรับการนำไปต่อยอดทั้งระบบหน้าร้าน (Frontend) และระบบหลังบ้าน (Admin / API) ได้อย่างยืดหยุ่น
+
+**ตัวอย่างฟีเจอร์:**
+- แสดงรายการสินค้า
+- ระบบตะกร้าสินค้า
+- นำไปต่อยอด backend / API ได้ง่าย
+- รองรับการ deploy ผ่าน Vercel
+
+---
+
+## 🧠 Tech Stack
+
+โปรเจกต์นี้ใช้เทคโนโลยีหลักดังนี้:
+- **Next.js** – Framework สำหรับ React  
+- **TypeScript** – เสริมความปลอดภัยของโค้ด  
+- **CSS / Module Styles** – สำหรับจัดการสไตล์  
+- รองรับการ deploy บน **Vercel** :contentReference[oaicite:2]{index=2}
+
+---
+
+## 📦 Installation
+
+1. Clone โปรเจกต์นี้
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+git clone https://github.com/tonzaa10/web-e-commerce-.git
