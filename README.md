@@ -35,7 +35,29 @@
 ```bash
 git clone https://github.com/tonzaa10/web-e-commerce-.git
 
+```
 
+2. เข้าไปในโฟลเดอร์โปรเจกต์
+
+```bash
+cd web-e-commerce-
+```
+
+3. ติดตั้ง dependencies
+```bash
+npm install
+```
+หรือ
+
+```bash 
+yarn install
+```
+
+---
+
+## 📂 Project Structure (โครงสร้างไฟล์)
+
+```bash
 ├── public/           # รูปภาพ / ไฟล์สาธารณะ
 ├── src/
 │   ├── app/          # ตัว Next.js App
@@ -44,4 +66,6 @@ git clone https://github.com/tonzaa10/web-e-commerce-.git
 ├── .gitignore
 ├── package.json
 └── README.md
+
+```
 
